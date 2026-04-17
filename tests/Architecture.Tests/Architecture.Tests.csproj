@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ApiHost\ApiHost.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Application\BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Testing\BuildingBlocks.Testing.csproj" />
+    <ProjectReference Include="..\..\src\Modules\*\*.Api\*.Api.csproj" />
+  </ItemGroup>
+</Project>

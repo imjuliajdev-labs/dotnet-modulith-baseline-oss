@@ -1,0 +1,22 @@
+{
+  "$schema": "./buildingblocks-budget.schema.json",
+  "description": "Per-project size budget for the shared BuildingBlocks projects under src/BuildingBlocks/. Each entry caps the number of .cs files and lines of code (excluding blank lines and single-line // comments). The BP-005 architecture test (BuildingBlocksGrowthBudgetTests) measures each project at test time and fails if the actual size exceeds its budget. Initial values are the measured size at 2026-04-13 plus the larger of +10% or +5 files / +100 LOC of headroom. Raising a budget requires a reviewed commit explaining why the new code is genuinely shared-kernel work and could not live inside an owning module — see docs/QUALITY_GATES.md.",
+  "projects": {
+    "BuildingBlocks.Application": {
+      "maxFiles": 43,
+      "maxLinesOfCode": 2277
+    },
+    "BuildingBlocks.Domain": {
+      "maxFiles": 10,
+      "maxLinesOfCode": 180
+    },
+    "BuildingBlocks.Infrastructure": {
+      "maxFiles": 65,
+      "maxLinesOfCode": 4500
+    },
+    "BuildingBlocks.Testing": {
+      "maxFiles": 8,
+      "maxLinesOfCode": 290
+    }
+  }
+}

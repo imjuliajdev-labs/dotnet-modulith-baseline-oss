@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose an improvement to the baseline, scaffold, docs, or validation workflow.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user or team problem is not handled well today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the change you want and why it belongs in the baseline.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope impact
+      description: Mention any likely impact on module scaffolding, contracts, docs, or governed rules.
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false

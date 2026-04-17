@@ -1,0 +1,40 @@
+is_global = true
+
+# Ban direct DateTime/DateTimeOffset.UtcNow and .Now — use IClock instead (RS0030 = banned API)
+dotnet_diagnostic.RS0030.severity = error
+
+# Mark members as static when possible
+dotnet_diagnostic.CA1822.severity = suggestion
+
+# Enforce sealed on classes that are not designed for inheritance
+dotnet_diagnostic.CA1852.severity = warning
+
+# Prefer static local functions
+dotnet_diagnostic.CA1868.severity = suggestion
+
+# Avoid unnecessary zero-length array allocations
+dotnet_diagnostic.CA1825.severity = warning
+
+# Use string.Contains(char) instead of string.Contains(string) with single characters
+dotnet_diagnostic.CA1847.severity = suggestion
+
+# Do not use insecure randomness
+dotnet_diagnostic.CA5394.severity = warning
+
+# Avoid using cref tags with a prefix
+dotnet_diagnostic.IDE0036.severity = suggestion
+
+# Mark local variable as const when possible
+dotnet_diagnostic.IDE0059.severity = warning
+
+# Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = warning
+
+# Simplify new expression
+dotnet_diagnostic.IDE0090.severity = suggestion
+
+# Namespace must match folder structure
+dotnet_diagnostic.IDE0130.severity = warning
+
+# File-scoped namespaces
+dotnet_diagnostic.IDE0161.severity = warning

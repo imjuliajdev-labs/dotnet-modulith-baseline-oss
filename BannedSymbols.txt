@@ -1,0 +1,8 @@
+P:System.DateTime.UtcNow;Use IClock.GetCurrentInstant() instead of DateTime.UtcNow
+P:System.DateTimeOffset.UtcNow;Use IClock.GetCurrentInstant() instead of DateTimeOffset.UtcNow
+P:System.DateTime.Now;Use IClock.GetCurrentInstant() instead of DateTime.Now
+P:System.DateTimeOffset.Now;Use IClock.GetCurrentInstant() instead of DateTimeOffset.Now
+P:System.DateTime.Today;Use IClock.GetCurrentInstant() instead of DateTime.Today
+P:System.Environment.TickCount;Use IClock.GetCurrentInstant() or a Duration-typed deadline instead of Environment.TickCount
+P:System.Environment.TickCount64;Use IClock.GetCurrentInstant() or a Duration-typed deadline instead of Environment.TickCount64
+M:System.Diagnostics.Stopwatch.GetTimestamp;Use IClock.GetCurrentInstant() or Duration subtraction instead of Stopwatch.GetTimestamp

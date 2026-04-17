@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<ItemGroup>
+    <ProjectReference Include="..\..\Identity\Identity.PublicContracts\Identity.PublicContracts.csproj" />
+    <ProjectReference Include="..\SampleFeature.Domain\SampleFeature.Domain.csproj" />
+    <ProjectReference Include="..\SampleFeature.PublicContracts\SampleFeature.PublicContracts.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Application\BuildingBlocks.Application.csproj" />
+  </ItemGroup>
+</Project>

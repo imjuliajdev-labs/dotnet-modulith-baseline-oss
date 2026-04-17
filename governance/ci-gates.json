@@ -1,0 +1,143 @@
+{
+  "$schema": "./ci-gates.schema.json",
+  "description": "Authoritative ordered list of CI gates. Both the GitHub Actions workflow (.github/workflows/ci.yml) and scripts/Invoke-LocalGates.ps1 dispatch each gate by id from this manifest. Editing this file is the only way to add, remove, or reorder a gate. LocalGateParityTests guards the contract between this manifest and ci.yml.",
+  "gates": [
+    {
+      "id": "spec-governance",
+      "job": "spec-governance",
+      "displayName": "Validate governance assets",
+      "command": "scripts/Validate-Governance.ps1"
+    },
+    {
+      "id": "dependency-policy",
+      "job": "dependency-policy",
+      "displayName": "Validate dependency allowlists",
+      "command": "scripts/Validate-DependencyPolicy.ps1"
+    },
+    {
+      "id": "secret-scan",
+      "job": "secret-scan",
+      "displayName": "Scan working tree and git history for leaked secrets",
+      "command": "scripts/Test-SecretScan.ps1"
+    },
+    {
+      "id": "build",
+      "job": "build",
+      "displayName": "Restore and build backend",
+      "command": "scripts/Build-Backend.ps1 -Configuration Release"
+    },
+    {
+      "id": "format-check",
+      "job": "build",
+      "displayName": "Verify whitespace formatting",
+      "command": "scripts/Test-WhitespaceFormatting.ps1"
+    },
+    {
+      "id": "dbmigrator-smoke",
+      "job": "build",
+      "displayName": "Smoke test DbMigrator bootstrap",
+      "command": "scripts/Invoke-DbMigrator.ps1 -Configuration Release -NoBuild"
+    },
+    {
+      "id": "dependency-vulnerability-scan",
+      "job": "dependency-vulnerability-scan",
+      "displayName": "Scan for known vulnerable packages",
+      "command": "scripts/Test-DependencyVulnerabilities.ps1"
+    },
+    {
+      "id": "backend-unit-tests",
+      "job": "backend-unit-tests",
+      "displayName": "Run backend unit tests",
+      "command": "scripts/Invoke-BackendUnitTests.ps1 -Configuration Release"
+    },
+    {
+      "id": "architecture-tests",
+      "job": "architecture-tests",
+      "displayName": "Run architecture tests",
+      "command": "scripts/Invoke-ArchitectureTests.ps1 -Configuration Release"
+    },
+    {
+      "id": "integration-tests",
+      "job": "integration-tests",
+      "displayName": "Run integration tests",
+      "command": "scripts/Invoke-IntegrationTests.ps1 -Configuration Release"
+    },
+    {
+      "id": "apihost-missing-configuration-smoke",
+      "job": "apihost-missing-configuration-smoke",
+      "displayName": "ApiHost missing-configuration smoke",
+      "command": "scripts/Test-ApiHostMissingConfiguration.ps1 -Configuration Release"
+    },
+    {
+      "id": "apihost-missing-migrations-smoke",
+      "job": "apihost-missing-migrations-smoke",
+      "displayName": "ApiHost missing-migrations smoke against PostgreSQL",
+      "command": "scripts/Test-ApiHostMissingMigrations.ps1 -Configuration Release",
+      "skipLocally": true,
+      "skipReason": "Requires a clean PostgreSQL instance bound to the CI service container; run via docker-compose locally if needed."
+    },
+    {
+      "id": "apihost-bootstrap-smoke",
+      "job": "apihost-bootstrap-smoke",
+      "displayName": "ApiHost bootstrap smoke against PostgreSQL",
+      "command": "scripts/Test-ApiHostBootstrap.ps1 -Configuration Release",
+      "skipLocally": true,
+      "skipReason": "Requires a clean PostgreSQL instance bound to the CI service container; run via docker-compose locally if needed."
+    },
+    {
+      "id": "contract-generation-and-compatibility",
+      "job": "contract-generation-and-compatibility",
+      "displayName": "Contract generation and compatibility",
+      "command": "scripts/Generate-Contracts.ps1 -Configuration Release"
+    },
+    {
+      "id": "frontend-lint",
+      "job": "frontend-quality",
+      "displayName": "Frontend lint",
+      "command": "scripts/Invoke-FrontendCommand.ps1 -Command lint"
+    },
+    {
+      "id": "frontend-typecheck",
+      "job": "frontend-quality",
+      "displayName": "Frontend typecheck",
+      "command": "scripts/Invoke-FrontendCommand.ps1 -Command typecheck"
+    },
+    {
+      "id": "frontend-build",
+      "job": "frontend-quality",
+      "displayName": "Frontend production build",
+      "command": "scripts/Invoke-FrontendCommand.ps1 -Command build"
+    },
+    {
+      "id": "frontend-unit-tests",
+      "job": "frontend-unit-tests",
+      "displayName": "Frontend unit tests",
+      "command": "scripts/Invoke-FrontendCommand.ps1 -Command test"
+    },
+    {
+      "id": "frontend-e2e",
+      "job": "frontend-e2e",
+      "displayName": "Frontend end-to-end tests",
+      "command": "scripts/Invoke-FrontendCommand.ps1 -Command test:e2e",
+      "skipLocally": true,
+      "skipReason": "Requires PostgreSQL service container plus Playwright Chromium install; run on demand."
+    }
+  ],
+  "jobs": [
+    { "id": "spec-governance", "needs": [] },
+    { "id": "dependency-policy", "needs": ["spec-governance"] },
+    { "id": "secret-scan", "needs": ["spec-governance"] },
+    { "id": "build", "needs": ["spec-governance", "dependency-policy"] },
+    { "id": "dependency-vulnerability-scan", "needs": ["build"] },
+    { "id": "backend-unit-tests", "needs": ["build"] },
+    { "id": "architecture-tests", "needs": ["spec-governance"] },
+    { "id": "integration-tests", "needs": ["build"] },
+    { "id": "apihost-missing-configuration-smoke", "needs": ["build"] },
+    { "id": "apihost-missing-migrations-smoke", "needs": ["build"] },
+    { "id": "apihost-bootstrap-smoke", "needs": ["build"] },
+    { "id": "contract-generation-and-compatibility", "needs": ["build"] },
+    { "id": "frontend-quality", "needs": ["contract-generation-and-compatibility"] },
+    { "id": "frontend-unit-tests", "needs": ["frontend-quality"] },
+    { "id": "frontend-e2e", "needs": ["frontend-unit-tests"] }
+  ]
+}

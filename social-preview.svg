@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="hostBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#68217a"/>
+      <stop offset="100%" stop-color="#512bd4"/>
+    </linearGradient>
+    <linearGradient id="moduleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#252540"/>
+      <stop offset="100%" stop-color="#1e1e35"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#ffffff" stroke-width="0.5">
+    <line x1="0" y1="80" x2="1280" y2="80"/>
+    <line x1="0" y1="160" x2="1280" y2="160"/>
+    <line x1="0" y1="240" x2="1280" y2="240"/>
+    <line x1="0" y1="320" x2="1280" y2="320"/>
+    <line x1="0" y1="400" x2="1280" y2="400"/>
+    <line x1="0" y1="480" x2="1280" y2="480"/>
+    <line x1="0" y1="560" x2="1280" y2="560"/>
+    <line x1="160" y1="0" x2="160" y2="640"/>
+    <line x1="320" y1="0" x2="320" y2="640"/>
+    <line x1="480" y1="0" x2="480" y2="640"/>
+    <line x1="640" y1="0" x2="640" y2="640"/>
+    <line x1="800" y1="0" x2="800" y2="640"/>
+    <line x1="960" y1="0" x2="960" y2="640"/>
+    <line x1="1120" y1="0" x2="1120" y2="640"/>
+  </g>
+
+  <!-- Title -->
+  <text x="640" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="700" fill="#ffffff" letter-spacing="1">dotnet-modulith-baseline</text>
+  <text x="640" y="108" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#8b8ba3" letter-spacing="2">OPINIONATED  ·  DRIFT-RESISTANT  ·  PRODUCTION-GRADE</text>
+
+  <!-- Host boundary -->
+  <rect x="90" y="136" width="1100" height="330" rx="16" fill="none" stroke="url(#hostBorder)" stroke-width="2" stroke-dasharray="8 4" opacity="0.6"/>
+  <text x="110" y="162" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#512bd4" font-weight="600" letter-spacing="2">APIHOST</text>
+
+  <!-- Row 1: Baseline modules -->
+  <!-- Module: Platform -->
+  <g>
+    <rect x="110" y="180" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#512bd4" stroke-width="1.5"/>
+    <circle cx="132" cy="205" r="7" fill="#512bd4" opacity="0.8"/>
+    <text x="147" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">Platform</text>
+    <text x="132" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Bootstrap manifest</text>
+    <text x="132" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Module state management</text>
+    <text x="132" y="264" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Runtime activation</text>
+    <circle cx="320" cy="205" r="5" fill="#34d399" filter="url(#glow)"/>
+    <text x="295" y="279" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#34d399" opacity="0.6">baseline</text>
+  </g>
+
+  <!-- Module: Identity -->
+  <g>
+    <rect x="360" y="180" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#512bd4" stroke-width="1.5"/>
+    <circle cx="382" cy="205" r="7" fill="#68217a" opacity="0.8"/>
+    <text x="397" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">Identity</text>
+    <text x="382" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Cookie + machine auth</text>
+    <text x="382" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">RBAC (Admin, User, Machine)</text>
+    <text x="382" y="264" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Step-up · Session revocation</text>
+    <circle cx="570" cy="205" r="5" fill="#34d399" filter="url(#glow)"/>
+    <text x="545" y="279" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#34d399" opacity="0.6">baseline</text>
+  </g>
+
+  <!-- Row 1 right: "Your modules" placeholder -->
+  <g>
+    <rect x="870" y="180" width="300" height="105" rx="10" fill="url(#moduleGrad)" stroke="#512bd4" stroke-width="1.5" stroke-dasharray="6 3"/>
+    <circle cx="892" cy="205" r="7" fill="#333355" opacity="0.8"/>
+    <text x="907" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#6b6b8a">Your Modules</text>
+    <text x="892" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4a4a65">Fork, scaffold, extend</text>
+    <text x="892" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4a4a65">Architecture tests enforce boundaries</text>
+    <text x="892" y="264" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4a4a65">29 rules keep you honest</text>
+  </g>
+
+  <!-- Row 2: Teaching modules -->
+  <!-- Module: Blog -->
+  <g>
+    <rect x="110" y="300" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="132" cy="325" r="7" fill="#3b82f6" opacity="0.8"/>
+    <text x="147" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">Blog</text>
+    <text x="132" y="352" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">EF-first aggregate + taxonomy</text>
+    <text x="132" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Scheduling · Outbox publication</text>
+    <text x="132" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Settings · Full frontend surface</text>
+    <text x="282" y="399" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#3b82f6" opacity="0.6">teaching</text>
+  </g>
+
+  <!-- Module: Admin -->
+  <g>
+    <rect x="360" y="300" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="382" cy="325" r="7" fill="#3b82f6" opacity="0.8"/>
+    <text x="397" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">Admin</text>
+    <text x="382" y="352" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Cross-module projections</text>
+    <text x="382" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Process managers · Recovery</text>
+    <text x="382" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Realtime updates (SignalR)</text>
+    <text x="532" y="399" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#3b82f6" opacity="0.6">teaching</text>
+  </g>
+
+  <!-- Module: KnowledgeBase -->
+  <g>
+    <rect x="610" y="300" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="632" cy="325" r="7" fill="#3b82f6" opacity="0.8"/>
+    <text x="647" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">KnowledgeBase</text>
+    <text x="632" y="352" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Runtime settings · Content</text>
+    <text x="632" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Optimistic concurrency</text>
+    <text x="632" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Specialized PostgreSQL stores</text>
+    <text x="782" y="399" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#3b82f6" opacity="0.6">teaching</text>
+  </g>
+
+  <!-- Module: SampleFeature -->
+  <g>
+    <rect x="860" y="300" width="230" height="105" rx="10" fill="url(#moduleGrad)" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="882" cy="325" r="7" fill="#3b82f6" opacity="0.8"/>
+    <text x="897" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#e0e0f0">SampleFeature</text>
+    <text x="882" y="352" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Smallest scaffold reference</text>
+    <text x="882" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">EF Core persistence</text>
+    <text x="882" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b8a">Scheduling · Outbox</text>
+    <text x="1032" y="399" font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#3b82f6" opacity="0.6">teaching</text>
+  </g>
+
+  <!-- Arrow between rows: baseline → teaching -->
+  <text x="640" y="296" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#512bd4" opacity="0.5" letter-spacing="3">PUBLICCONTRACTS</text>
+
+  <!-- PublicContracts bar -->
+  <g>
+    <rect x="110" y="420" width="980" height="32" rx="8" fill="#1a1a30" stroke="#512bd4" stroke-width="1" opacity="0.5"/>
+    <text x="600" y="441" text-anchor="middle" font-family="Segoe UI Mono, Consolas, monospace" font-size="11" fill="#512bd4" letter-spacing="3">DISPATCHER  ·  OUTBOX / INBOX  ·  CROSS-MODULE BOUNDARY  ·  29 ENFORCED RULES</text>
+  </g>
+
+  <!-- Tech badges -->
+  <g transform="translate(640, 472)">
+    <rect x="-450" y="0" width="100" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="-400" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">.NET 10</text>
+
+    <rect x="-320" y="0" width="120" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="-260" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">PostgreSQL</text>
+
+    <rect x="-170" y="0" width="100" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="-120" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">React 19</text>
+
+    <rect x="-40" y="0" width="110" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="15" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">RTK Query</text>
+
+    <rect x="100" y="0" width="120" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="160" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">Minimal APIs</text>
+
+    <rect x="250" y="0" width="120" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="310" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">61 Arch Tests</text>
+
+    <rect x="400" y="0" width="100" height="28" rx="14" fill="#1e1e35" stroke="#333355" stroke-width="1"/>
+    <text x="450" y="19" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#a0a0c0">13-Stage CI</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="640" y="540" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#6b6b8a">Strict boundaries  ·  Executable rules  ·  Scaffold-first  ·  AI-friendly guardrails</text>
+
+  <!-- GitHub handle -->
+  <text x="640" y="578" text-anchor="middle" font-family="Segoe UI Mono, Consolas, monospace" font-size="14" fill="#4a4a65">github.com/imjuliajdev-labs</text>
+</svg>

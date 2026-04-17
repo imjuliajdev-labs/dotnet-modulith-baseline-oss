@@ -1,0 +1,230 @@
+{
+  "$schema": "./schema/rule-enforcement-map.v1.schema.json",
+  "schemaVersion": "1.0",
+  "rules": {
+    "BP-001": [
+      "tests/Architecture.Tests/ProjectReferenceBoundaryTests.cs"
+    ],
+    "BP-002": [
+      "tests/Architecture.Tests/ApiEdgeGuardrailTests.cs",
+      "tests/Architecture.Tests/ConfigurationGovernanceGuardrailTests.cs",
+      "tests/Architecture.Tests/SharedAbstractionTests.cs",
+      "tests/Architecture.Tests/DispatcherPipelineRegistrationTests.cs"
+    ],
+    "BP-003": [
+      "tests/Architecture.Tests/ProjectReferenceBoundaryTests.cs",
+      "tests/Architecture.Tests/ServiceRegistrationBoundaryTests.cs"
+    ],
+    "BP-004": [
+      "tests/Architecture.Tests/PublicContractsGuardrailTests.cs"
+    ],
+    "BP-005": [
+      "tests/Architecture.Tests/ProjectReferenceBoundaryTests.cs",
+      "tests/Architecture.Tests/SharedAbstractionTests.cs",
+      "tests/Architecture.Tests/GovernanceAssetTests.cs",
+      "tests/Architecture.Tests/BuildingBlocksGrowthBudgetTests.cs"
+    ],
+    "BP-006": [
+      "tests/Architecture.Tests/ApiEdgeGuardrailTests.cs",
+      "tests/Architecture.Tests/ProjectReferenceBoundaryTests.cs"
+    ],
+    "BP-007": [
+      "tests/Architecture.Tests/PlatformSubsystemGuardrailTests.cs",
+      "tests/Integration.Tests/ModuleStateInfrastructureTests.cs",
+      "tests/Integration.Tests/PlatformModuleStateIntegrationTests.cs",
+      "tests/Integration.Tests/PlatformModuleStatePersistenceIntegrationTests.cs",
+      "tests/Integration.Tests/Modules/Admin/Workers/AdminAnnouncementProjectionRecoveryWorkerIntegrationTests.cs"
+    ],
+    "BP-008": [
+      "tests/Integration.Tests/ProblemDetailsPipelineTests.cs"
+    ],
+    "BP-009": [
+      "tests/Integration.Tests/ProblemDetailsPipelineTests.cs"
+    ],
+    "BP-010": [
+      "web/eslint.config.js",
+      "scripts/Test-ModuleScaffoldFrontend.ps1"
+    ],
+    "BP-011": [
+      "tests/Architecture.Tests/PublicContractsGuardrailTests.cs",
+      "tests/Architecture.Tests/SharedContractCompatibilityGuardrailTests.cs",
+      "tests/Architecture.Tests/SharedReadPolicyGuardrailTests.cs"
+    ],
+    "BP-012": [
+      "tests/Architecture.Tests/ProcessManagerGuardrailTests.cs",
+      "tests/Integration.Tests/ProcessManagerCheckpointIntegrationTests.cs"
+    ],
+    "BP-013": [
+      "tests/Architecture.Tests/DispatcherIdempotencyGuardrailTests.cs",
+      "tests/Integration.Tests/DispatcherIdempotencyIntegrationTests.cs"
+    ],
+    "BP-014": [
+      "tests/Integration.Tests/IdentityAuthenticationIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityBrowserCookieCompatibilityIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityUserAdministrationIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityPasswordChangeIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityRecentAuthenticationIntegrationTests.cs",
+      "tests/Integration.Tests/AuthorizationInfrastructureTests.cs",
+      "tests/Integration.Tests/PlatformModuleStateIntegrationTests.cs",
+      "tests/Architecture.Tests/ApiEdgeGuardrailTests.cs",
+      "tests/Architecture.Tests/OpenApiContractSnapshotTests.cs",
+      "tests/Architecture.Tests/FrontendAuthorizationPostureGuardrailTests.cs",
+      "tests/Architecture.Tests/WorkflowConfigurationFreshnessTests.cs"
+    ],
+    "BP-015": [
+      "scripts/New-Module.ps1",
+      "scripts/Test-ModuleScaffold.ps1",
+      "tests/Architecture.Tests/ScaffoldContractTests.cs",
+      "tests/Architecture.Tests/ConfigurationGovernanceGuardrailTests.cs",
+      "tests/Architecture.Tests/Modules/Blog/Configuration/BlogConfigurationGovernanceTests.cs",
+      "tests/Integration.Tests/Modules/Blog/Configuration/BlogSettingsIntegrationTests.cs",
+      "tests/Integration.Tests/Modules/KnowledgeBase/KnowledgeBaseConfigurationIntegrationTests.cs"
+    ],
+    "BP-016": [
+      "tests/Integration.Tests/ModuleBulkheadIntegrationTests.cs",
+      "tests/Integration.Tests/IntegrationEventOutboxBulkheadIntegrationTests.cs",
+      "tests/Integration.Tests/ChaosScenarios/OutboxResilienceChaosTests.cs"
+    ],
+    "BP-017": [
+      "tests/Integration.Tests/PlatformRealtimeIntegrationTests.cs",
+      "tests/Architecture.Tests/FrontendFeatureManifestReconciliationTests.cs",
+      "web/eslint.config.js",
+      "web/tests/unit/feature-registry.test.ts",
+      "web/tests/unit/browser-realtime.test.ts",
+      "web/tests/unit/signalr-browser-realtime.test.ts",
+      "web/tests/e2e/app-shell.spec.ts"
+    ],
+    "BP-018": [
+      "scripts/Generate-Contracts.ps1",
+      "scripts/Validate-OpenApiCompatibility.ps1",
+      "tests/Architecture.Tests/ExternalHttpContractGuardrailTests.cs",
+      "tests/Architecture.Tests/OpenApiContractSnapshotTests.cs",
+      "tests/Architecture.Tests/IntegrationEventLifecycleGuardrailTests.cs",
+      "tests/Architecture.Tests/HttpContractLifecycleGuardrailTests.cs",
+      "tests/Architecture.Tests/Modules/KnowledgeBase/Events/KnowledgeBaseIntegrationEventContractTests.cs",
+      "tests/Integration.Tests/ModuleCompositionIntegrationTests.cs",
+      "tests/Integration.Tests/Modules/KnowledgeBase/Events/KnowledgeBaseOutboxIntegrationTests.cs",
+      "tests/Integration.Tests/Modules/Admin/Events/AdminConsumerReplayIntegrationTests.cs"
+    ],
+    "BP-019": [
+      "scripts/New-Module.ps1",
+      "scripts/Test-ModuleScaffold.ps1",
+      "tests/Architecture.Tests/ScaffoldContractTests.cs",
+      "tests/Architecture.Tests/IntegrationEventPublicationGuardrailTests.cs",
+      "tests/Architecture.Tests/IntegrationEventConsumptionGuardrailTests.cs",
+      "tests/Architecture.Tests/PlatformSubsystemGuardrailTests.cs",
+      "tests/Integration.Tests/IntegrationEventInboxIntegrationTests.cs",
+      "tests/Integration.Tests/IntegrationEventOutboxIntegrationTests.cs",
+      "tests/Integration.Tests/ChaosScenarios/OutboxResilienceChaosTests.cs"
+    ],
+    "BP-020": [
+      "tests/Integration.Tests/DatabaseMigrationRunnerIntegrationTests.cs",
+      "tests/Integration.Tests/PlatformModuleStatePersistenceIntegrationTests.cs",
+      "tests/Integration.Tests/SchemaIsolationIntegrationTests.cs"
+    ],
+    "BP-021": [
+      "scripts/New-Module.ps1",
+      "scripts/Test-ModuleScaffold.ps1",
+      "scripts/Test-ModuleScaffoldFrontend.ps1",
+      "scripts/Start-Adoption.ps1",
+      "tests/Architecture.Tests/ScaffoldContractTests.cs",
+      "tests/Architecture.Tests/SharedAbstractionTests.cs",
+      "tests/Architecture.Tests/PlatformSubsystemGuardrailTests.cs",
+      "tests/Architecture.Tests/PlaceholderTestGuardrailTests.cs",
+      "tests/Architecture.Tests/CsprojCanonicalShapeGuardrailTests.cs",
+      "tests/Architecture.Tests/WorkflowGovernanceGuardrailTests.cs"
+    ],
+    "BP-022": [
+      "scripts/Validate-Governance.ps1",
+      "scripts/Invoke-CiGate.ps1",
+      "scripts/Invoke-LocalGates.ps1",
+      "tests/Architecture.Tests/RuleCatalogTests.cs",
+      "tests/Architecture.Tests/LocalGateParityTests.cs",
+      "tests/Architecture.Tests/WaiverValidationTests.cs",
+      "tests/Architecture.Tests/WorkflowGovernanceGuardrailTests.cs"
+    ],
+    "BP-023": [
+      "scripts/New-Module.ps1",
+      "tests/Architecture.Tests/ScaffoldContractTests.cs",
+      "tests/Architecture.Tests/SharedContractCompatibilityGuardrailTests.cs"
+    ],
+    "BP-024": [
+      "tests/Architecture.Tests/ApiEdgeGuardrailTests.cs",
+      "tests/Integration.Tests/MachineAuthenticationIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityBootstrapCredentialSafetyIntegrationTests.cs"
+    ],
+    "BP-025": [
+      "scripts/Validate-DependencyPolicy.ps1",
+      "tests/Architecture.Tests/CentralPackageManagementGuardrailTests.cs"
+    ],
+    "BP-026": [
+      "scripts/Validate-Governance.ps1",
+      "tests/Architecture.Tests/GovernanceAssetTests.cs",
+      "tests/Architecture.Tests/RuleCatalogTests.cs",
+      "tests/Architecture.Tests/GovernedDocumentationConsistencyTests.cs",
+      "tests/Architecture.Tests/DocumentationReferenceIntegrityTests.cs",
+      "tests/Architecture.Tests/FrontendGovernanceDocTests.cs",
+      "tests/Architecture.Tests/MaintainedNarrativeDocumentationTests.cs",
+      "tests/Architecture.Tests/WorkflowConfigurationFreshnessTests.cs",
+      "tests/Architecture.Tests/WorkflowGovernanceGuardrailTests.cs"
+    ],
+    "BP-027": [
+      "tests/Architecture.Tests/SharedAbstractionTests.cs",
+      "tests/Integration.Tests/DispatcherIdempotencyIntegrationTests.cs",
+      "tests/Integration.Tests/PlatformModuleStatePersistenceIntegrationTests.cs",
+      "scripts/Test-ApiHostMissingConfiguration.ps1"
+    ],
+    "BP-028": [
+      "tests/Integration.Tests/BrowserCorsConfigurationIntegrationTests.cs"
+    ],
+    "BP-029": [
+      "tests/Architecture.Tests/SharedAbstractionTests.cs",
+      "tests/Integration.Tests/IdentityBrowserCookieCompatibilityIntegrationTests.cs"
+    ],
+    "BP-030": [
+      "tests/Integration.Tests/IdentityAuthenticationIntegrationTests.cs",
+      "tests/Integration.Tests/IdentityPasswordChangeIntegrationTests.cs"
+    ],
+    "BP-031": [
+      "tests/Architecture.Tests/HandlerTestCoverageGuardrailTests.cs",
+      "tests/Architecture.Tests/HandlerCoverageWorkflowTests.cs",
+      "tests/Architecture.Tests/HandlerDispatchReachabilityTests.cs",
+      "tests/Architecture.Tests/Support/HandlerCoverageInventory.cs",
+      "tests/Architecture.Tests/Support/HandlerDispatchReachability.cs",
+      "scripts/Report-HandlerCoverage.ps1"
+    ],
+    "BP-032": [
+      "tests/Architecture.Tests/PublicListEndpointPaginationGuardrailTests.cs"
+    ],
+    "BP-033": [
+      "tests/Architecture.Tests/CrossModuleReferenceCapGuardrailTests.cs",
+      "tests/Architecture.Tests/ModuleDependencyReportTests.cs",
+      "tests/Architecture.Tests/WorkflowGovernanceGuardrailTests.cs",
+      "scripts/Report-ModuleDependencies.ps1"
+    ],
+    "BP-034": [
+      "tests/Architecture.Tests/SharedReadFallbackGuardrailTests.cs",
+      "tests/Architecture.Tests/SharedReadPolicyGuardrailTests.cs",
+      "tests/Architecture.Tests/SharedReadBehaviorTestCoverageTests.cs",
+      "tests/Integration.Tests/SharedRuntime/SharedReadTimeoutBehaviorTests.cs",
+      "tests/Integration.Tests/SharedRuntime/SharedReadFallbackBehaviorTests.cs",
+      "tests/Integration.Tests/ChaosScenarios/SharedReadChaosTests.cs"
+    ],
+    "BP-035": [
+      "tests/Architecture.Tests/EfQueryProjectionGuardrailTests.cs"
+    ],
+    "BP-036": [
+      "web/tests/unit/feature-registry.test.ts",
+      "web/tests/e2e/app-shell.spec.ts"
+    ],
+    "BP-037": [
+      "tests/Architecture.Tests/FrontendFormValidationGuardrailTests.cs"
+    ],
+    "BP-038": [
+      "scripts/Test-SecretScan.ps1"
+    ],
+    "BP-039": [
+      "tests/Architecture.Tests/SharedAbstractionTests.cs"
+    ]
+  }
+}

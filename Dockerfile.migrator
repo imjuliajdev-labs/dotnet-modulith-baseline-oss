@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /source
+
+COPY global.json Directory.Build.props Directory.Packages.props ./
+COPY dotnet-modulith-baseline.sln ./
+COPY src/ src/
+
+RUN dotnet restore src/Tools/DbMigrator/DbMigrator.csproj
+RUN dotnet publish src/Tools/DbMigrator/DbMigrator.csproj -c Release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+RUN groupadd --system appgroup \
+    && useradd --system --gid appgroup --no-create-home appuser
+
+COPY --from=build /app .
+
+RUN chown -R appuser:appgroup /app
+
+USER appuser
+
+ENTRYPOINT ["dotnet", "DbMigrator.dll"]

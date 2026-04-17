@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./waiver-entry.v1.schema.json",
+  "title": "dotnet-modulith-baseline waiver entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "waiver_id",
+    "rule_id",
+    "scope",
+    "owner",
+    "created_utc",
+    "expires_utc",
+    "reason",
+    "linked_follow_up",
+    "removal_condition"
+  ],
+  "properties": {
+    "waiver_id": {
+      "type": "string",
+      "pattern": "^WVR-[0-9]{4}$"
+    },
+    "rule_id": {
+      "type": "string",
+      "pattern": "^BP-[0-9]{3}$"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "linked_follow_up": {
+      "type": "string",
+      "minLength": 1
+    },
+    "removal_condition": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

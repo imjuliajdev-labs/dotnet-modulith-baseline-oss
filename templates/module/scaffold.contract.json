@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.0",
+  "requiredProjectSuffixes": [
+    ".Api",
+    ".Application",
+    ".Domain",
+    ".Infrastructure",
+    ".PublicContracts"
+  ],
+  "requiredPaths": [
+    "src/Modules/{ModuleName}/{ModuleName}.Api/{ModuleName}.Api.csproj",
+    "src/Modules/{ModuleName}/{ModuleName}.Application/{ModuleName}.Application.csproj",
+    "src/Modules/{ModuleName}/{ModuleName}.Domain/{ModuleName}.Domain.csproj",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/{ModuleName}.Infrastructure.csproj",
+    "src/Modules/{ModuleName}/{ModuleName}.PublicContracts/{ModuleName}.PublicContracts.csproj",
+    "src/Modules/{ModuleName}/{ModuleName}.Api/{ModuleName}Module.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Application/{ModuleName}AssemblyMarker.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Domain/{ModuleName}AssemblyMarker.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/{ModuleName}AssemblyMarker.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.PublicContracts/{ModuleName}AssemblyMarker.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Api/Configuration/{ModuleName}ApiOptions.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Configuration/{ModuleName}InfrastructureOptions.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/{ModuleName}InfrastructureServiceCollectionExtensions.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}PersistenceDefaults.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}PersistenceDbContext.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}EntityTypeConfigurationExample.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}PersistenceOptionsExtensions.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}PersistenceDbContextFactory.cs",
+    "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Persistence/{ModuleName}DatabaseMigration.cs",
+    "tests/Module.UnitTests/{ModuleName}/{ModuleName}ModuleDescriptorTests.cs",
+    "tests/Integration.Tests/Modules/{ModuleName}/{ModuleName}BootstrapManifestTests.cs",
+    "tests/Architecture.Tests/Modules/{ModuleName}/{ModuleName}ArchitectureTests.cs",
+    "tests/Architecture.Tests/Modules/{ModuleName}/Configuration/{ModuleName}ConfigurationGovernanceTests.cs"
+  ],
+  "optionalPathsByCapability": {
+    "hasOperatorManagedSettings": [
+      "src/Modules/{ModuleName}/{ModuleName}.Application/Settings/{ModuleName}SettingsContracts.cs",
+      "src/Modules/{ModuleName}/{ModuleName}.Api/{ModuleName}SettingsHttpModels.cs",
+      "tests/Integration.Tests/Modules/{ModuleName}/Configuration/{ModuleName}SettingsIntegrationTests.cs"
+    ],
+    "publishesIntegrationEvents": [
+      "src/Modules/{ModuleName}/{ModuleName}.PublicContracts/Events/{ModuleName}EventV1.cs",
+      "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Outbox/{ModuleName}OutboxRegistration.cs",
+      "tests/Architecture.Tests/Modules/{ModuleName}/Events/{ModuleName}IntegrationEventContractTests.cs",
+      "tests/Integration.Tests/Modules/{ModuleName}/Events/{ModuleName}OutboxIntegrationTests.cs"
+    ],
+    "consumesIntegrationEvents": [
+      "src/Modules/{ModuleName}/{ModuleName}.Application/Consumers/{ModuleName}IntegrationEventConsumer.cs",
+      "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Inbox/{ModuleName}InboxStore.cs",
+      "tests/Integration.Tests/Modules/{ModuleName}/Events/{ModuleName}ConsumerReplayIntegrationTests.cs"
+    ],
+    "exposesSynchronousReadContracts": [
+      "src/Modules/{ModuleName}/{ModuleName}.PublicContracts/Queries/{ModuleName}ReadModel.cs",
+      "tests/Architecture.Tests/Modules/{ModuleName}/SharedQueries/{ModuleName}SharedQueryContractTests.cs"
+    ],
+    "needsProcessManager": [
+      "src/Modules/{ModuleName}/{ModuleName}.Application/ProcessManagers/{ModuleName}ProcessManager.cs",
+      "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/ProcessManagers/{ModuleName}ProcessManagerStateStore.cs",
+      "tests/Integration.Tests/Modules/{ModuleName}/ProcessManagers/{ModuleName}ProcessManagerIntegrationTests.cs"
+    ],
+    "hasOptedInIdempotentCommands": [
+      "src/Modules/{ModuleName}/{ModuleName}.Application/Idempotency/{ModuleName}IdempotencyPolicy.cs"
+    ],
+    "hasBackgroundWorkers": [
+      "src/Modules/{ModuleName}/{ModuleName}.Infrastructure/Workers/{ModuleName}Worker.cs"
+    ],
+    "introducesExternallyConsumedHttpContracts": [
+      "src/Modules/{ModuleName}/{ModuleName}.Api/Contracts/{ModuleName}ContractV1.cs"
+    ],
+    "exposesMachineConsumableEndpoints": [
+      "src/Modules/{ModuleName}/{ModuleName}.Api/Machine/{ModuleName}MachineEndpoints.cs"
+    ],
+    "emitsBrowserRealtimeNotifications": [
+      "web/src/features/{ModuleKey}/realtime/index.ts"
+    ],
+    "requiresRecentAuthStepUp": [
+      "src/Modules/{ModuleName}/{ModuleName}.Application/Authorization/{ModuleName}RecentAuthenticationPolicy.cs",
+      "tests/Architecture.Tests/Modules/{ModuleName}/Authorization/{ModuleName}RecentAuthenticationPolicyTests.cs"
+    ],
+    "hasFrontendSurface": [
+      "web/src/features/{ModuleKey}/index.ts",
+      "web/src/features/{ModuleKey}/{ModuleName}Feature.tsx"
+    ]
+  },
+  "conditionalPaths": [
+    {
+      "allOf": [
+        "hasOperatorManagedSettings",
+        "hasFrontendSurface"
+      ],
+      "paths": [
+        "web/src/features/{ModuleKey}/{ModuleName}SettingsTags.ts",
+        "web/src/features/{ModuleKey}/{ModuleName}SettingsApi.ts",
+        "web/src/features/{ModuleKey}/{ModuleName}SettingsProjection.ts",
+        "web/tests/unit/{ModuleKey}-settings-api.test.ts",
+        "web/tests/unit/{ModuleKey}-settings-tags.test.ts",
+        "web/tests/unit/{ModuleKey}-feature.test.tsx",
+        "web/tests/e2e/{ModuleKey}.spec.ts"
+      ]
+    }
+  ]
+}

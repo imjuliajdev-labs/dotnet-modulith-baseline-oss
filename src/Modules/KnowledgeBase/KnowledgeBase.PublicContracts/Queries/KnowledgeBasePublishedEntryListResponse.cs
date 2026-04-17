@@ -1,0 +1,3 @@
+namespace KnowledgeBase.PublicContracts.Queries;
+
+public sealed record KnowledgeBasePublishedEntryListResponse(IReadOnlyCollection<KnowledgeBasePublishedEntryReadModel> Entries);

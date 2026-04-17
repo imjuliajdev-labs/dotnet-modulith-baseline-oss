@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="NodaTime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\Domain\BuildingBlocks.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

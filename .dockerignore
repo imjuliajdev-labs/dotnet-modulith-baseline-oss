@@ -1,0 +1,13 @@
+.git/
+.vs/
+.vscode/
+artifacts/
+TestResults/
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/coverage/
+**/playwright-report/
+**/test-results/
+*.log

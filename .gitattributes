@@ -1,0 +1,41 @@
+# Lock line endings to LF across platforms so the dotnet format whitespace gate
+# is deterministic for Windows, macOS, and Linux contributors. Without this,
+# core.autocrlf=true would re-CRLF text files on checkout and break the gate.
+* text=auto eol=lf
+
+# Explicit text overrides for files where the extension alone is ambiguous.
+*.cs           text eol=lf diff=csharp
+*.csproj       text eol=lf
+*.props        text eol=lf
+*.targets      text eol=lf
+*.sln          text eol=lf
+*.json         text eol=lf
+*.md           text eol=lf
+*.yml          text eol=lf
+*.yaml         text eol=lf
+*.ps1          text eol=lf
+*.sh           text eol=lf
+*.ts           text eol=lf
+*.tsx          text eol=lf
+*.js           text eol=lf
+*.cjs          text eol=lf
+*.mjs          text eol=lf
+*.html         text eol=lf
+*.css          text eol=lf
+Dockerfile*    text eol=lf
+
+# Binary assets: never apply text normalization.
+*.png          binary
+*.jpg          binary
+*.jpeg         binary
+*.gif          binary
+*.ico          binary
+*.svg          text eol=lf
+*.pdf          binary
+*.zip          binary
+*.gz           binary
+*.tar          binary
+*.woff         binary
+*.woff2        binary
+*.ttf          binary
+*.eot          binary

@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    env_file: .env
+    environment:
+      POSTGRES_DB: baseline
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  db-migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrator
+    env_file: .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__BaselineDatabase: "Host=postgres;Port=5432;Database=baseline;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__Identity__SeededAdmin__Password: "${SEEDED_ADMIN_PASSWORD}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.112.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./docker/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "13133:13133" # health
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:13133/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__BaselineDatabase: "Host=postgres;Port=5432;Database=baseline;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__Identity__SeededAdmin__Password: "${SEEDED_ADMIN_PASSWORD}"
+      Modules__Identity__SeededMachine__ApiKey: "${SEEDED_MACHINE_API_KEY}"
+      Modules__Identity__SeededMachine__Roles__0: "Machine"
+      OpenTelemetry__OtlpEndpoint: "http://otel-collector:4317"
+      OpenTelemetry__ServiceName: "dotnet-modulith-baseline-api"
+    depends_on:
+      db-migrator:
+        condition: service_completed_successfully
+      otel-collector:
+        condition: service_healthy
+
+volumes:
+  pgdata:

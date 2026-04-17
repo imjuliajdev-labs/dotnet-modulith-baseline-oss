@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./waiver-file.v1.schema.json",
+  "title": "dotnet-modulith-baseline waiver file",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "waivers"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "./schema/waiver-file.v1.schema.json"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "waivers": {
+      "type": "array",
+      "items": {
+        "$ref": "./waiver-entry.v1.schema.json"
+      }
+    }
+  }
+}

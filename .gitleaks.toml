@@ -1,0 +1,24 @@
+# gitleaks configuration for dotnet-modulith-baseline.
+#
+# This config extends the upstream gitleaks default rule set (imported by
+# `useDefault = true`). It only adds explicit allowlist entries for files that
+# ship intentional development placeholders so those known-safe patterns do not
+# trigger the secret-scan gate.
+#
+# Do not add a new allowlist entry to silence a genuine finding. Remove the
+# leak or rotate the value instead. An allowlist entry must be a narrow,
+# reviewable carve-out for a file whose placeholder is intentional.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known-safe placeholders in committed development artifacts."
+paths = [
+    # Local-only example env file. Contains development placeholders (e.g.
+    # POSTGRES_PASSWORD=postgres, seeded LocalOnly!123 values) that must not
+    # leave the repository, but are not real secrets. The adjacent runtime
+    # .env file is gitignored, so any real operator-supplied secret is kept
+    # out of the tree through .gitignore rather than through this allowlist.
+    '''^\.env\.example$''',
+]

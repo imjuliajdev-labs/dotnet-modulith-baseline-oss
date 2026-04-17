@@ -1,0 +1,56 @@
+# .NET
+bin/
+obj/
+
+# Node
+node_modules/
+dist/
+coverage/
+playwright-report/
+*.tsbuildinfo
+
+# Testcontainers and local tooling
+.testcontainers/
+TestResults/
+artifacts/test-results/
+artifacts/handler-coverage.json
+web/test-results/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!web/.env.e2e
+*.pem
+*.key
+*.pfx
+
+# Editors
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Local analysis and logs
+ANALYSIS_REPORT.md
+*.log
+sessions/
+
+# Governance scratch output
+.tmp/
+.pi/
+
+# Local agent/editor working context (never commit)
+.claude/
+
+# Local-only docs and AI working context
+# Keep anything here to stay in your workspace (and in AI context) without committing.
+docs/_local/
+docs/**/*.local.md
+notes/
+scratch/
+.ai/

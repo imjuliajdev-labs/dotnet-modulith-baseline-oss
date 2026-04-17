@@ -1,0 +1,20 @@
+# Governance-approved baseline reshape migrations.
+#
+# Migrations listed here are explicitly allowed to contain destructive operations
+# (DropColumn, DropTable, RenameColumn, RenameTable, DropForeignKey, DropPrimaryKey,
+# DropIndex, plus raw SQL equivalents) because they reshape the starter baseline
+# schema before an adopter is expected to be running production data on it.
+#
+# Adding a migration to this list is a governance decision: the reviewer attests
+# that the migration is part of the pre-adoption baseline evolution, not an
+# in-place change against live adopter data.
+#
+# Format: one migration filename per line (without the .cs extension).
+# Lines starting with '#' and blank lines are ignored.
+#
+# Migrations NOT in this list remain subject to the expand-and-contract rule
+# enforced by MigrationSafetyGuardrailTests.
+
+20260409011348_AdoptAspNetCoreIdentityEfCore
+20260411114738_AdoptRoleBasedAuthorization
+20260413004835_ContractBlogPostLegacyPascalCaseColumns

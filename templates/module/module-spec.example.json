@@ -1,0 +1,37 @@
+{
+  "moduleName": "GovernanceSmoke",
+  "moduleKey": "governance-smoke",
+  "moduleOwner": "bootstrap",
+  "displayName": "Governance Smoke",
+  "routePrefix": "/governance-smoke",
+  "schemaName": "governance_smoke",
+  "isCore": false,
+  "defaultEnabled": true,
+  "moduleNamespace": "governance-smoke",
+  "publishesIntegrationEvents": true,
+  "consumesIntegrationEvents": true,
+  "exposesSynchronousReadContracts": true,
+  "needsProcessManager": true,
+  "hasOptedInIdempotentCommands": true,
+  "hasBackgroundWorkers": true,
+  "introducesExternallyConsumedHttpContracts": true,
+  "exposesMachineConsumableEndpoints": true,
+  "emitsBrowserRealtimeNotifications": true,
+  "crossModulePublicContractDependencies": [],
+  "configurationSectionName": "Modules:GovernanceSmoke",
+  "operatorManagedSettings": [
+    {
+      "name": "RealtimeCacheWindowSeconds",
+      "displayName": "Realtime cache window seconds",
+      "type": "int",
+      "defaultValue": 30,
+      "reloadSafe": true
+    }
+  ],
+  "settingsFanoutTags": [
+    "GovernanceSmokeViews"
+  ],
+  "hasOperatorManagedSettings": true,
+  "requiresRecentAuthStepUp": true,
+  "hasFrontendSurface": true
+}

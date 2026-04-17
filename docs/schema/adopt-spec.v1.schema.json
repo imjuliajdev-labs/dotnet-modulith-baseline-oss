@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotnet-modulith-baseline.local/schemas/adopt-spec.v1.schema.json",
+  "title": "Adopt Spec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "projectName",
+    "projectSlug",
+    "modulePreset",
+    "scratch",
+    "database",
+    "validation"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://dotnet-modulith-baseline.local/schemas/adopt-spec.v1.schema.json"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "projectName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projectSlug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "solutionFileName": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\\.sln$"
+    },
+    "modulePreset": {
+      "type": "string",
+      "enum": [
+        "clean-base",
+        "recommended-first-product-base",
+        "full-teaching-set",
+        "custom"
+      ]
+    },
+    "keepModules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Platform",
+          "Identity",
+          "SampleFeature",
+          "Blog",
+          "KnowledgeBase",
+          "Admin"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "scratch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "root"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "repo-local roots resolve under the repository root; os-temp roots resolve under the operating system temp directory.",
+          "enum": [
+            "repo-local",
+            "os-temp"
+          ]
+        },
+        "root": {
+          "type": "string",
+          "minLength": 1,
+          "description": "repo-local roots must stay under the repository root and os-temp roots must stay under the operating system temp directory. During adoption validation the resolved path is exported as DOTNET_MODULITH_SCRATCH_ROOT so downstream governance scripts share the same scratch location."
+        }
+      }
+    },
+    "database": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resetLocalDatabase"
+      ],
+      "properties": {
+        "resetLocalDatabase": {
+          "type": "boolean"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "description": "none skips validation, fast runs a reviewed manifest-backed subset through scripts/Invoke-LocalGates.ps1, and full runs the canonical local gate wall through scripts/Invoke-LocalGates.ps1 while honoring each gate's skipLocally default.",
+          "enum": [
+            "none",
+            "fast",
+            "full"
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "modulePreset": {
+            "const": "custom"
+          }
+        },
+        "required": [
+          "modulePreset"
+        ]
+      },
+      "then": {
+        "required": [
+          "keepModules"
+        ]
+      }
+    }
+  ]
+}
