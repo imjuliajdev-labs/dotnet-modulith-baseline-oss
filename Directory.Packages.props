@@ -20,7 +20,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Npgsql" Version="10.0.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-    <PackageVersion Include="NodaTime" Version="3.2.0" />
+    <PackageVersion Include="NodaTime" Version="3.3.1" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.4.0" />
     <!--
       BannedApiAnalyzers is intentionally pinned to a beta. The latest stable (3.3.4) predates
