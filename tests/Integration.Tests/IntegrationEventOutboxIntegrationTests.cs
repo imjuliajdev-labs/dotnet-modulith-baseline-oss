@@ -25,6 +25,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();
@@ -57,6 +58,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();
@@ -89,6 +91,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();
@@ -137,6 +140,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();
@@ -178,6 +182,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();
@@ -221,6 +226,7 @@ public sealed class IntegrationEventOutboxIntegrationTests
             .WithDatabase("baseline")
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();

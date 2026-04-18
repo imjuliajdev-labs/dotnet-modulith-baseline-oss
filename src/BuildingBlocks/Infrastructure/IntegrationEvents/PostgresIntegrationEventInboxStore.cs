@@ -39,7 +39,9 @@ public sealed class PostgresIntegrationEventInboxStore : IIntegrationEventInboxS
         _deadLetterThreshold = deadLetterThreshold;
         _connectionString = dataSourceResolver.GetConnectionString(connectionStringName)
             ?? throw new InvalidOperationException(
-                $"PostgreSQL integration event inbox for module '{ModuleKey}' requires ConnectionStrings:{connectionStringName}.");
+                string.Equals(connectionStringName, SharedRuntimePersistenceDefaults.ConnectionStringName, StringComparison.Ordinal)
+                    ? SharedRuntimePersistenceDefaults.MissingConnectionStringMessage
+                    : $"PostgreSQL integration event inbox for module '{ModuleKey}' requires ConnectionStrings:{connectionStringName}.");
         _dataSource = dataSourceResolver.GetRequiredDataSource(connectionStringName);
     }
 

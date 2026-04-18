@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
+        services.TryAddSingleton<IConfiguration>(static _ => new ConfigurationBuilder().Build());
         services.AddDatabaseMigrationSupport();
         services.TryAddSingleton<IPostgresDataSourceResolver, ConfiguredPostgresDataSourceResolver>();
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IHostedService, SharedRuntimePersistenceConfigurationValidationHostedService>());

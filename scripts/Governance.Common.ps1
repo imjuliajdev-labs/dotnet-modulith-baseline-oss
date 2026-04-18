@@ -632,6 +632,139 @@ function Resolve-AdoptionKeepModules {
     return @($supportedModules | Where-Object { $requestedModules -contains $_ })
 }
 
+function Test-DockerDaemonResponsive {
+    $docker = Get-Command docker -ErrorAction SilentlyContinue
+    if ($null -eq $docker) {
+        return $false
+    }
+
+    $previousNativePreference = $Global:PSNativeCommandUseErrorActionPreference
+    $Global:PSNativeCommandUseErrorActionPreference = $false
+    try {
+        & docker info *> $null
+        return $LASTEXITCODE -eq 0
+    }
+    finally {
+        $Global:PSNativeCommandUseErrorActionPreference = $previousNativePreference
+    }
+}
+
+function Get-DockerDesktopWindowsPath {
+    $candidates = @()
+
+    if (-not [string]::IsNullOrWhiteSpace($env:ProgramFiles)) {
+        $candidates += (Join-Path -Path $env:ProgramFiles -ChildPath 'Docker/Docker/Docker Desktop.exe')
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace(${env:ProgramFiles(x86)})) {
+        $candidates += (Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath 'Docker/Docker/Docker Desktop.exe')
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($env:LocalAppData)) {
+        $candidates += (Join-Path -Path $env:LocalAppData -ChildPath 'Programs/Docker/Docker/Docker Desktop.exe')
+    }
+
+    foreach ($candidate in $candidates | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) {
+        if (Test-Path -Path $candidate -PathType Leaf) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
+function Invoke-DockerDaemonAutoStart {
+    $previousNativePreference = $Global:PSNativeCommandUseErrorActionPreference
+    $Global:PSNativeCommandUseErrorActionPreference = $false
+    try {
+        if ($IsWindows) {
+            $dockerDesktopPath = Get-DockerDesktopWindowsPath
+            if ([string]::IsNullOrWhiteSpace($dockerDesktopPath)) {
+                return $false
+            }
+
+            Start-Process -FilePath $dockerDesktopPath | Out-Null
+            return $true
+        }
+
+        if ($IsMacOS) {
+            $openCommand = Get-Command open -ErrorAction SilentlyContinue
+            if ($null -eq $openCommand) {
+                return $false
+            }
+
+            & open -a Docker *> $null
+            return $LASTEXITCODE -eq 0
+        }
+
+        if ($IsLinux) {
+            $systemctlCommand = Get-Command systemctl -ErrorAction SilentlyContinue
+            if ($null -ne $systemctlCommand) {
+                & systemctl start docker *> $null
+                return $LASTEXITCODE -eq 0
+            }
+
+            $serviceCommand = Get-Command service -ErrorAction SilentlyContinue
+            if ($null -ne $serviceCommand) {
+                & service docker start *> $null
+                return $LASTEXITCODE -eq 0
+            }
+        }
+
+        return $false
+    }
+    finally {
+        $Global:PSNativeCommandUseErrorActionPreference = $previousNativePreference
+    }
+}
+
+function Assert-TestcontainersDockerReady {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Context,
+
+        [Parameter(Mandatory)]
+        [string]$RetryScript,
+
+        [int]$TimeoutSeconds = 180,
+
+        [int]$PollIntervalSeconds = 3,
+
+        [switch]$AttemptAutoStart
+    )
+
+    $docker = Get-Command docker -ErrorAction SilentlyContinue
+    if ($null -eq $docker) {
+        throw "$Context requires Docker because the suite boots PostgreSQL through Testcontainers. Install Docker Desktop/Engine and ensure 'docker info' succeeds before rerunning $RetryScript."
+    }
+
+    if (Test-DockerDaemonResponsive) {
+        return
+    }
+
+    if (-not $AttemptAutoStart) {
+        throw "$Context requires a running Docker daemon because the suite boots PostgreSQL through Testcontainers. Start Docker and ensure 'docker info' succeeds before rerunning $RetryScript."
+    }
+
+    Write-Host 'Docker daemon is not ready. Attempting to start Docker automatically...' -ForegroundColor Yellow
+    $autoStartAttempted = Invoke-DockerDaemonAutoStart
+    if (-not $autoStartAttempted) {
+        throw "$Context requires a running Docker daemon because the suite boots PostgreSQL through Testcontainers. This script could not determine how to start Docker automatically on this machine. Start Docker and ensure 'docker info' succeeds before rerunning $RetryScript."
+    }
+
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        if (Test-DockerDaemonResponsive) {
+            Write-Host 'Docker daemon is ready.' -ForegroundColor Green
+            return
+        }
+
+        Start-Sleep -Seconds $PollIntervalSeconds
+    }
+
+    throw "$Context requires a running Docker daemon because the suite boots PostgreSQL through Testcontainers. This script attempted to start Docker automatically, but 'docker info' did not succeed within $TimeoutSeconds seconds. Start Docker and ensure 'docker info' succeeds before rerunning $RetryScript."
+}
+
 function Get-PathComparisonMode {
     if ($IsWindows) {
         return [System.StringComparison]::OrdinalIgnoreCase

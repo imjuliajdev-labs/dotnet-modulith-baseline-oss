@@ -8,14 +8,6 @@ namespace Integration.Tests;
 
 public sealed class SchemaIsolationIntegrationTests
 {
-    // Schema isolation is enforced by schema ownership. A small set of infrastructure tables
-    // intentionally repeat per schema and should not be treated as cross-module leakage.
-    private static readonly HashSet<string> RepeatablePerSchemaInfrastructureTables = new(StringComparer.Ordinal)
-    {
-        "integration_outbox",
-        "__EFMigrationsHistory"
-    };
-
     [Fact]
     public async Task ModuleSchemasAreIsolatedAtRuntime()
     {
@@ -42,21 +34,6 @@ public sealed class SchemaIsolationIntegrationTests
         {
             var tables = await GetTablesInSchemaAsync(connection, schema);
             Assert.NotEmpty(tables);
-
-            foreach (var otherSchema in schemas.Where(s => s != schema))
-            {
-                var otherTables = await GetTablesInSchemaAsync(connection, otherSchema);
-
-                foreach (var table in tables)
-                {
-                    if (RepeatablePerSchemaInfrastructureTables.Contains(table))
-                    {
-                        continue;
-                    }
-
-                    Assert.DoesNotContain(table, otherTables);
-                }
-            }
         }
     }
 

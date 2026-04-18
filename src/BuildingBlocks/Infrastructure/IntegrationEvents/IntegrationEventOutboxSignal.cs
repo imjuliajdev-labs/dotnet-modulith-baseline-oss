@@ -42,7 +42,14 @@ public sealed class IntegrationEventOutboxSignal : IAsyncDisposable
     {
         ArgumentNullException.ThrowIfNull(connection);
 
-        await using var command = new NpgsqlCommand($"NOTIFY {ChannelName}", connection);
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connection.ConnectionString)
+        {
+            Enlist = false
+        };
+
+        await using var notifyDataSource = NpgsqlDataSource.Create(connectionStringBuilder.ConnectionString);
+        await using var notifyConnection = await notifyDataSource.OpenConnectionAsync(cancellationToken);
+        await using var command = new NpgsqlCommand($"NOTIFY {ChannelName}", notifyConnection);
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 

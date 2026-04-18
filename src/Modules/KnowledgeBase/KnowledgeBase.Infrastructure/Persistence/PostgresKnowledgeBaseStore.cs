@@ -31,7 +31,9 @@ internal sealed class PostgresKnowledgeBaseStore : IKnowledgeBaseStore, IKnowled
 
         _connectionString = dataSourceResolver.GetConnectionString(KnowledgeBasePersistenceDefaults.ConnectionStringName)
             ?? throw new InvalidOperationException(
-                $"KnowledgeBase persistence requires ConnectionStrings:{KnowledgeBasePersistenceDefaults.ConnectionStringName}.");
+                string.Equals(KnowledgeBasePersistenceDefaults.ConnectionStringName, SharedRuntimePersistenceDefaults.ConnectionStringName, StringComparison.Ordinal)
+                    ? SharedRuntimePersistenceDefaults.MissingConnectionStringMessage
+                    : $"KnowledgeBase persistence requires ConnectionStrings:{KnowledgeBasePersistenceDefaults.ConnectionStringName}.");
         _dataSource = dataSourceResolver.GetRequiredDataSource(KnowledgeBasePersistenceDefaults.ConnectionStringName);
     }
 

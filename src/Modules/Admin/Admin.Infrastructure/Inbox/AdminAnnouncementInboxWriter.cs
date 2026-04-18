@@ -15,7 +15,9 @@ internal sealed class AdminAnnouncementInboxWriter : IAdminAnnouncementInbox, ID
 
         _connectionString = dataSourceResolver.GetConnectionString(AdminPersistenceDefaults.ConnectionStringName)
             ?? throw new InvalidOperationException(
-                $"Admin inbox persistence requires ConnectionStrings:{AdminPersistenceDefaults.ConnectionStringName}.");
+                string.Equals(AdminPersistenceDefaults.ConnectionStringName, SharedRuntimePersistenceDefaults.ConnectionStringName, StringComparison.Ordinal)
+                    ? SharedRuntimePersistenceDefaults.MissingConnectionStringMessage
+                    : $"Admin inbox persistence requires ConnectionStrings:{AdminPersistenceDefaults.ConnectionStringName}.");
         _dataSource = dataSourceResolver.GetRequiredDataSource(AdminPersistenceDefaults.ConnectionStringName);
     }
 

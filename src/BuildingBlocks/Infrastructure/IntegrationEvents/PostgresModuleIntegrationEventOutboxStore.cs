@@ -39,7 +39,10 @@ public sealed class PostgresModuleIntegrationEventOutboxStore : IIntegrationEven
         _tableName = tableName.Trim();
         _qualifiedTableName = $"{QuoteIdentifier(_schemaName)}.{QuoteIdentifier(_tableName)}";
         _connectionString = dataSourceResolver.GetConnectionString(connectionStringName)
-            ?? throw new InvalidOperationException($"PostgreSQL integration-event outbox for module '{ModuleKey}' requires ConnectionStrings:{connectionStringName}.");
+            ?? throw new InvalidOperationException(
+                string.Equals(connectionStringName, SharedRuntimePersistenceDefaults.ConnectionStringName, StringComparison.Ordinal)
+                    ? SharedRuntimePersistenceDefaults.MissingConnectionStringMessage
+                    : $"PostgreSQL integration-event outbox for module '{ModuleKey}' requires ConnectionStrings:{connectionStringName}.");
         _dataSource = dataSourceResolver.GetRequiredDataSource(connectionStringName);
     }
 

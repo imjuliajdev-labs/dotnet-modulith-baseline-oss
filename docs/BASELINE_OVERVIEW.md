@@ -195,7 +195,7 @@ Teams adopting this baseline should expect the following posture unless they int
 
 Teams should also expect that several choices are intentionally optimized for the long-term target shape rather than for the smallest first commit.
 
-For adopters planning to fork the repo into a product base, the safest next step is [`ADOPT.md`](ADOPT.md): use `pwsh ./scripts/Start-Adoption.ps1` if you want a guided first-time wrapper that asks for the fork inputs and runs the dry run for you, or use the config-first direct path there if you already know the exact spec you want to apply.
+For adopters planning to fork the repo into a product base, the safest next step is [`ADOPT.md`](ADOPT.md). It documents one supported adoption workflow with two entry points: use `pwsh ./scripts/Start-Adoption.ps1` for first-time human adoption, or use the config-first path there when the inputs are already resolved or the run is agent-driven.
 
 ## Best fit
 

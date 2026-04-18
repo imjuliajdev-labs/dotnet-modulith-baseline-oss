@@ -1,68 +1,131 @@
 # Adopting This Baseline For Your Own Project
 
-This guide covers forking the baseline, renaming it, and removing the reference modules so you start clean with only the governed platform and your own modules.
+This guide covers adopting the baseline into your own product repo, renaming it, and removing the reference modules so you start clean with only the governed platform and your own modules. Whether you begin from a GitHub fork or a local clone of the OSS repo, the supported adoption flow runs from a local clone of the baseline into a separate target folder for your product.
 
-## Guided First-Time Adoption Wrapper
+> Recommended for first-time human adopters: `pwsh ./scripts/Start-Adoption.ps1`
+>
+> Advanced path for automation, agents, or already-decided inputs: `templates/adoption/adopt-spec.example.json` + `pwsh ./scripts/Adopt-Baseline.ps1`
 
-If you are approaching the repo as a first-time human adopter and have not yet resolved the rename, target-folder, or module-retention inputs, start with the guided wrapper:
+## Before You Start
+
+The safest mental model is:
+
+- **source baseline repo** = your local clone of this baseline
+- **target product repo** = the separate local folder where your adopted project will be created
+
+Example:
+
+- source baseline repo: `C:\Users\jcv02\Documents\repos\dotnet-modulith-baseline-oss`
+- target product repo: `C:\Users\jcv02\Documents\repos\hspsv2`
+
+Important boundaries:
+
+- do **not** run adoption from inside the target folder
+- do **not** adopt in place inside the baseline repo when you are using the guided wrapper
+- the target folder should ideally **not exist yet**; if it already exists, keep it **empty**
+- cloning this repo locally does **not** send your edits back to the baseline repo; your changes stay local unless you explicitly push to a remote you control or have write access to
+
+## Choose Your Path
+
+### Path 1: Guided adoption for first-time humans
+
+Use this when you have not fully resolved the target folder, rename, or module-retention decisions yet.
 
 ```powershell
 pwsh ./scripts/Start-Adoption.ps1
 ```
 
-What the wrapper does:
+The guided wrapper gathers the inputs, writes `adopt-spec.json` into the target repo, runs a dry run first, and only proceeds to apply mode after explicit confirmation.
 
-- asks for the target folder path and optional target git remote URL
-- asks for the human-facing application name and derives a default technical slug you can override
-- lets you choose a built-in teaching-module posture or make a custom keep/remove selection, with a short explanation of what each optional teaching module is for
-- asks for the validation profile and whether the local Docker-backed database should be reset during apply mode
-- clones the current baseline into the target folder, aligns that target with the current working tree snapshot, writes `adopt-spec.json` into the target repo, and configures remotes safely
-- runs `pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json -DryRun` in the target repo before any apply-mode mutation
-- asks for explicit confirmation before it runs apply mode
+### Path 2: Config-first adoption for automation, agents, and already-decided inputs
 
-The guided wrapper is a front-end to the same supported config-first adoption workflow below. It does not duplicate the rename or module-removal logic. During the module-selection step it also points the adopter to `docs/MODULE_GUIDE.md` and this guide for more detail before they decide what to keep.
-
-Identity input terminology:
-
-- `projectName` — the actual human-facing application or product name shown to users, such as the README title and browser title
-- `projectSlug` — the technical identifier used for runtime identity strings such as the auth cookie name, Data Protection app name, migration advisory lock, telemetry service name, default solution file name, and default web package name
-- `solutionFileName` — the `.sln` file name; by default this is derived from `projectSlug`
-
-## Config-First Adoption Workflow
-
-The repository also includes a config-driven direct workflow so you can make the core fork decisions explicitly and then apply the supported built-in fork shapes from one checked-in spec.
-
-Start from the example spec:
+Use this when you already know the target folder, project name, technical slug, module preset, and validation posture.
 
 ```powershell
 cp ./templates/adoption/adopt-spec.example.json ./adopt-spec.json
 pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json -DryRun
-```
-
-Then apply a supported built-in preset:
-
-```powershell
 pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json
 ```
 
-What the workflow does:
+This is the direct path for automation and agent-driven runs.
 
-- validates the adoption spec shape
-- resolves the selected module preset into the concrete keep and remove sets
-- derives the functional identity values that must be renamed from `projectSlug`
-- resolves the scratch root (repo-local `.tmp/` by default in the example spec), validates that repo-local roots stay under the repo and `os-temp` roots stay under the operating-system temp directory, and shares the resolved path with downstream governance scripts through `DOTNET_MODULITH_SCRATCH_ROOT` during validation
-- applies the rename path for the baseline slug and solution identity
-- removes unsupported teaching modules for the supported built-in presets
-- optionally resets the local Docker-backed database when explicitly requested
-- runs the requested validation profile unless `-SkipValidation` is supplied, dispatching through the canonical local gate runner instead of maintaining a second raw command list
+## Choosing Which Modules To Keep
+
+`Platform` and `Identity` are core modules and must always stay. The remaining checked-in modules are teaching slices you may keep temporarily, study, or remove during adoption.
+
+| If you want... | Keep |
+| --- | --- |
+| the cleanest product base | `Platform`, `Identity` |
+| a realistic first product base | `Platform`, `Identity`, `SampleFeature`, `Blog` |
+| all live teaching references | the full checked-in module set |
+| a custom teaching mix | `custom` with an explicit `keepModules` array |
+
+Use [`MODULE_GUIDE.md`](MODULE_GUIDE.md) when you want help deciding what each checked-in module is for before you choose.
+
+## Recommended Path: Guided Adoption For First-Time Humans
+
+Run this from the **source baseline repo root**:
+
+```powershell
+pwsh ./scripts/Start-Adoption.ps1
+```
+
+What the wrapper asks for:
+
+- target folder path
+- optional target git remote URL
+- human-facing application name
+- technical slug
+- teaching-module posture or custom keep set
+- validation profile
+- whether the local Docker-backed database should be reset during apply mode
+
+Key identity terms:
+
+- `projectName` — the human-facing application or product name shown to users, such as the README title and browser title
+- `projectSlug` — the technical identifier used for runtime identity strings such as the auth cookie name, Data Protection app name, migration advisory lock, telemetry service name, default solution file name, and default web package name
+- `solutionFileName` — the `.sln` file name; by default this is derived from `projectSlug`
+
+What the wrapper does:
+
+- clones the current baseline into the target folder
+- aligns that target with the current working tree snapshot
+- writes `adopt-spec.json` into the target repo
+- configures remotes safely
+- runs `pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json -DryRun` before any apply-mode mutation
+- asks for explicit confirmation before it runs apply mode
+
+During the module-selection step it also points you to [`MODULE_GUIDE.md`](MODULE_GUIDE.md) and this guide for more detail before you decide what to keep.
+
+## Advanced Path: Config-First Adoption
+
+Use this path when you already know the inputs or want the deterministic direct path for automation and agent-driven runs.
+
+### Minimal example
+
+```powershell
+cp ./templates/adoption/adopt-spec.example.json ./adopt-spec.json
+pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json -DryRun
+pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json
+```
+
+### Supported module presets
+
+| `modulePreset` | Keep set |
+| --- | --- |
+| `clean-base` | `Platform`, `Identity` |
+| `recommended-first-product-base` | `Platform`, `Identity`, `SampleFeature`, `Blog` |
+| `full-teaching-set` | full checked-in module set |
+| `custom` | explicit `keepModules` array |
 
 Current apply support:
 
 - all four `modulePreset` values are supported in apply mode, including `custom` with an explicit `keepModules` array
-- `Platform` and `Identity` must always be in the resolved keep set; any combination of `SampleFeature`, `Blog`, `KnowledgeBase`, and `Admin` is valid
+- `Platform` and `Identity` must always be in the resolved keep set
+- any combination of `SampleFeature`, `Blog`, `KnowledgeBase`, and `Admin` is valid
 - the shared-runtime behavior test suite is regenerated from the resolved keep set, so adopted forks only keep the behavior assertions that still have backing modules
 
-Validation profile semantics:
+### Validation profiles
 
 - `none` — skip validation entirely
 - `fast` — run a reviewed manifest-backed subset through `pwsh ./scripts/Invoke-LocalGates.ps1 -Only <gate-id>` (`spec-governance`, `dependency-policy`, `build`, `backend-unit-tests`, `architecture-tests`, `frontend-lint`, `frontend-typecheck`, and `frontend-build`)
@@ -70,135 +133,26 @@ Validation profile semantics:
 
 When you need a narrower rerun after a fix, use `pwsh ./scripts/Invoke-CiGate.ps1 -Id <id>` instead of hand-rolling raw `dotnet test` or `pnpm` command lists.
 
-The resolved scratch root is also exported as `DOTNET_MODULITH_SCRATCH_ROOT` while the requested validation profile runs so downstream governance scripts keep their scratch output co-located with the adoption workflow.
+### Spec notes
 
-Supported module presets in the example schema:
+- the workflow validates the adoption spec shape before apply mode
+- the example spec defaults scratch output to repo-local `.tmp`
+- repo-local scratch roots must stay under the repo, and `os-temp` roots must stay under the operating-system temp directory
+- the resolved scratch root is exported as `DOTNET_MODULITH_SCRATCH_ROOT` while validation runs so downstream governance scripts share the same scratch location
 
-- `clean-base` — keep only `Platform` and `Identity`
-- `recommended-first-product-base` — keep `Platform`, `Identity`, `SampleFeature`, and `Blog`
-- `full-teaching-set` — keep the full checked-in module set
-- `custom` — specify `keepModules` explicitly
+## What The Adoption Workflow Changes
 
-The rename/removal checklist below remains the detailed reference for what the script is doing and the fallback manual path if you need a shape that apply mode does not support yet.
+Both supported entry points drive the same underlying adoption workflow. In apply mode it:
 
-## Optional: AI-Assisted Adoption Prompt
+- resolves the selected module preset into concrete keep and remove sets
+- derives the functional identity values that must be renamed from `projectSlug`
+- applies the rename path for the baseline slug and solution identity
+- removes unsupported teaching modules for the selected keep set
+- regenerates shared-runtime behavior tests to match the resolved keep set
+- optionally resets the local Docker-backed database when explicitly requested
+- runs the requested validation profile unless `-SkipValidation` is supplied
 
-This section is optional. The human-first path in [`../README.md`](../README.md), the guided wrapper `scripts/Start-Adoption.ps1`, and the rest of this guide remain the supported way to install and adopt the baseline.
-
-If you use AI tools and want a clean first-pass validation of the adopter experience, choose one of these supported entry points after opening the repository root:
-
-1. Prompt A: install and evaluate the OSS as-is (inline below)
-2. Prompt B: fork, rename, and adopt it as a clean product base via the shared repo-owned prompt at [`../prompts/adopt-governed-baseline.md`](../prompts/adopt-governed-baseline.md)
-3. Human-first guided wrapper: `pwsh ./scripts/Start-Adoption.ps1`
-
-### Prompt A: Install And Evaluate As-Is
-
-```text
-You are in the root of the dotnet-modulith-baseline repository. Your job is to install, run, smoke-test, and explain how to use this OSS as a first-time adopter.
-
-Work autonomously. Do not stop at planning. Prefer the supported Docker path first, and only fall back to the local path if Docker is unavailable or fails for an environment-specific reason.
-
-Before doing anything else, read these files in this order:
-1. AGENTS.md
-2. README.md
-3. docs/BASELINE_DECLARATION.md
-4. docs/ADOPT.md
-
-Goals:
-1. Get the OSS running through the supported path.
-2. Verify the app is actually usable, not just that commands exit successfully.
-3. Give a concise “how to use it” walkthrough for a new adopter.
-4. Classify any blocker as environment issue, documentation mismatch, or repo defect.
-
-Execution rules:
-- Prefer Docker quick start first.
-- Do not edit repository files unless a real blocker clearly requires a fix.
-- If something fails, diagnose the root cause before giving up.
-- Do not ask for permission for obvious next steps.
-- Keep going until you either verify the OSS works or you find a real blocker.
-- Clean up any long-running containers or processes when you are done unless leaving them running is necessary for the final verification you report.
-
-Step 1: Check prerequisites relevant to the chosen path.
-For Docker path:
-- Verify Docker and Docker Compose are available.
-
-If Docker path is not viable, verify local prerequisites:
-- .NET 10 SDK
-- Node.js 20+
-- PowerShell 7+
-- pnpm via corepack
-- PostgreSQL 16+
-- mkcert only if needed for Vite HTTPS dev flow
-
-Step 2: Prefer the full Docker composed path documented in the README.
-- Run:
-	- cp .env.example .env
-	- docker compose up --build
-- Wait for postgres, db-migrator, and api to be ready.
-- Verify the app responds at http://localhost:8080
-
-Step 3: Smoke-test the running app.
-- Confirm the login page loads.
-- Use the seeded browser credentials from the Development configuration. On the default checked-in Docker path, `.env.example` provides:
-	- username: admin
-	- password: LocalOnly!123
-- Confirm login works if browser tooling is available.
-- Verify representative endpoints if feasible:
-	- /_host/status
-	- /api/v1/platform/bootstrap
-	- /api/v1/identity/antiforgery
-- If feasible, test a machine-authenticated request using the seeded Development credential. On the default checked-in Docker path:
-	- header: X-Machine-Key
-	- value: MachineOnly!123
-
-Step 4: If Docker is unavailable or blocked, use the supported local fallback from the README.
-- Install frontend dependencies from web:
-	- corepack enable
-	- pnpm install
-- For the browser shell on the local path, either:
-	- run `pnpm dev` and browse to https://localhost:3000, or
-	- run `pnpm build` once so ApiHost can serve the compiled `web/dist` assets
-- Set:
-	- ASPNETCORE_ENVIRONMENT=Development
-	- ConnectionStrings__BaselineDatabase
-	- Modules__Identity__SeededAdmin__Password
-- If you also want to exercise the default machine-auth smoke on the local path, set:
-	- Modules__Identity__SeededMachine__ApiKey=MachineOnly!123
-	- Modules__Identity__SeededMachine__Roles__0=Machine
-- Run ./scripts/Start-ApiHost.ps1
-- If you chose `pnpm dev`, use the Vite origin for the login page and the ApiHost origin for API probes.
-- Use the same smoke-test expectations as above.
-- If local prerequisites are missing, report the exact missing prerequisite and stop only after checking whether a documented fallback exists.
-
-Step 5: Explain how to use the OSS as a first-time adopter.
-Give a concise walkthrough covering:
-- what the user should see after login
-- what Platform is for
-- what Admin is for
-- what SampleFeature is for
-- what KnowledgeBase is for
-- the safest next step if someone wants to fork this into their own project
-- any important adopter caveats from docs/ADOPT.md
-
-Step 6: Final deliverable.
-Provide:
-- the exact commands you ran
-- what passed
-- what did not pass
-- any blocker with root cause
-- whether this OSS appears ready for a first-time adopter to install and use
-- whether it appears ready to fork as a base project
-
-If you discover a docs mismatch or repo defect, cite the exact file and describe the impact clearly.
-```
-
-### Prompt B: Shared adoption prompt file
-
-If you are using an agent in this repo, prefer the shared repo-owned adoption prompt at [`../prompts/adopt-governed-baseline.md`](../prompts/adopt-governed-baseline.md).
-
-That prompt is intentionally a thin wrapper around this guide, the guided wrapper `scripts/Start-Adoption.ps1`, the example adoption spec, and `scripts/Adopt-Baseline.ps1`. Keep this document as the canonical adoption checklist and update the repo-owned prompt file in the same review whenever the adoption workflow changes.
-
-## Identity Adoption
+## Identity Adoption Notes
 
 The `Identity` module is the production-grade authentication and role-based authorization answer for this baseline. It is not a stub. See [`adr/ADR-IDENTITY-POSTURE.md`](adr/ADR-IDENTITY-POSTURE.md) for the governing decision.
 
@@ -240,43 +194,47 @@ Set:
 
 In production, create real machine clients through the machine-client administration endpoints and never ship seeded machine config.
 
-## Rename Checklist
+## Manual/Reference Details
+
+You usually do not need the rest of this document when you follow one of the supported scripts. These sections are the detailed reference for what the scripts automate and the fallback manual path if you need it.
+
+### Rename Checklist
 
 The project name `dotnet-modulith-baseline` appears in functional code, not just documentation. Replace all occurrences with your project name before deploying.
 
-### Critical (Functional Impact)
+#### Critical (Functional Impact)
 
 These affect runtime behavior and must be renamed:
 
-| What                         | File                                                                                           | Line / Key                                                                  | Why It Matters                                                                           |
-| ---------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Auth cookie name             | `src/Modules/Identity/Identity.Infrastructure/IdentityInfrastructureServiceCollectionExtensions.cs` | `options.Cookie.Name = "__Host-dotnet-modulith-baseline"`                    | Browsers store sessions under this name                                                  |
-| Data Protection app name     | `src/BuildingBlocks/Infrastructure/Persistence/SharedRuntimePersistenceDefaults.cs`            | `DataProtectionApplicationName = "dotnet-modulith-baseline"`                 | Browser auth cookies must use the same app discriminator across instances and deployments |
-| Migration advisory lock      | `src/BuildingBlocks/Infrastructure/Persistence/DatabaseMigrationRunner.cs`                     | `PostgresMigrationLockName = "dotnet-modulith-baseline:migrations"`          | Prevents concurrent migration runs; collides if two baselines share a PostgreSQL instance |
-| OpenTelemetry service name   | `docker-compose.yml`                                                                            | `OpenTelemetry__ServiceName: "dotnet-modulith-baseline-api"`                | Identifies traces and metrics in your collector on the default local composed path       |
+| What | File | Line / Key | Why It Matters |
+| --- | --- | --- | --- |
+| Auth cookie name | `src/Modules/Identity/Identity.Infrastructure/IdentityInfrastructureServiceCollectionExtensions.cs` | `options.Cookie.Name = "__Host-dotnet-modulith-baseline"` | Browsers store sessions under this name |
+| Data Protection app name | `src/BuildingBlocks/Infrastructure/Persistence/SharedRuntimePersistenceDefaults.cs` | `DataProtectionApplicationName = "dotnet-modulith-baseline"` | Browser auth cookies must use the same app discriminator across instances and deployments |
+| Migration advisory lock | `src/BuildingBlocks/Infrastructure/Persistence/DatabaseMigrationRunner.cs` | `PostgresMigrationLockName = "dotnet-modulith-baseline:migrations"` | Prevents concurrent migration runs; collides if two baselines share a PostgreSQL instance |
+| OpenTelemetry service name | `docker-compose.yml` | `OpenTelemetry__ServiceName: "dotnet-modulith-baseline-api"` | Identifies traces and metrics in your collector on the default local composed path |
 
-### Project Structure
+#### Project structure
 
-| What             | File                          | Action                              |
-| ---------------- | ----------------------------- | ----------------------------------- |
-| Solution file    | `dotnet-modulith-baseline.sln` | Rename file to `{your-project}.sln` |
-| npm package name | `web/package.json`            | Change `"name"` field               |
+| What | File | Action |
+| --- | --- | --- |
+| Solution file | `dotnet-modulith-baseline.sln` | Rename file to `{your-project}.sln` |
+| npm package name | `web/package.json` | Change `"name"` field |
 
-### Container Builds
+#### Container builds
 
 The supported adoption script now rewrites the checked-in Docker build inputs when it renames the solution file. If you are following the fallback manual path instead of the script, update these too:
 
 - `Dockerfile` (`COPY dotnet-modulith-baseline.sln ./`)
 - `Dockerfile.migrator` (`COPY dotnet-modulith-baseline.sln ./`)
 
-### Tests
+#### Tests
 
 After renaming the cookie, update the cookie name string in all test files that reference it. A global find-and-replace for `__Host-dotnet-modulith-baseline` covers these:
 
 - `tests/Integration.Tests/**/*.cs` (roughly two dozen occurrences across auth, module-state, and module-specific test files)
 - `web/tests/e2e/app-shell.spec.ts` (1 occurrence in the E2E cookie mock)
 
-### Documentation and Schemas
+#### Documentation and schemas
 
 These are cosmetic but should match your project identity:
 
@@ -290,18 +248,18 @@ These are cosmetic but should match your project identity:
 - `waivers/schema/waiver-entry.v1.schema.json` (`title` field)
 - contributor-facing repo wording that still presents the fork as `dotnet-modulith-baseline`, especially `README.md`, `AGENTS.md`, and any baseline or ADR overview copy you expect downstream contributors or agents to read first
 
-### Scripts
+#### Scripts
 
 Temporary directory names in scaffold test scripts use the project name as a prefix. These are cosmetic but worth renaming for clarity:
 
 - `scripts/Test-ModuleScaffold.ps1`
 - `scripts/Test-ModuleScaffoldFrontend.ps1`
 
-## Removing Reference Modules
+### Removing Reference Modules
 
 The reference modules (`SampleFeature`, `Blog`, `KnowledgeBase`, `Admin`) are teaching examples. You may want to remove some or all of them. `Platform` and `Identity` are core modules and cannot be removed.
 
-### Safe Removal Order
+#### Safe removal order
 
 The teaching module dependency graph is directional. Among the four reference modules, only `Admin` reaches backward into other teaching modules:
 
@@ -310,11 +268,11 @@ The teaching module dependency graph is directional. Among the four reference mo
 
 Practical implications:
 
-- Removing `SampleFeature`, `Blog`, or `KnowledgeBase` only affects the matching tests, frontend feature, and the inverse `Admin` consumer for events that targeted that module.
-- Removing `Admin` is the cleanest single-module removal because nothing else in the teaching set depends on it.
-- If your goal is a clean fork, remove all unwanted reference modules in one bounded pass.
+- removing `SampleFeature`, `Blog`, or `KnowledgeBase` only affects the matching tests, frontend feature, and the inverse `Admin` consumer for events that targeted that module
+- removing `Admin` is the cleanest single-module removal because nothing else in the teaching set depends on it
+- if your goal is a clean fork, remove all unwanted reference modules in one bounded pass
 
-### When To Remove Them
+#### When to remove them
 
 The reference modules are more than demo features. They are the checked-in teaching path for the current seams after scaffolding. Removing them does not remove the executable drift-protection model, but it does remove the live examples contributors and AI tools can study in the same repo.
 
@@ -325,7 +283,7 @@ Choose one of these paths explicitly:
 
 Avoid mixing partial module removal with new module creation over several small edits. Either keep the teaching set intact while you scaffold, or remove the unwanted modules in one bounded cleanup pass.
 
-### Steps Per Module
+#### Steps per module
 
 For each module you remove:
 
@@ -340,18 +298,18 @@ For each module you remove:
 
 Notes:
 
-- `src/ApiHost/ApiHost.csproj` and the main test projects use wildcard module references, so deleting the module folder removes those project references automatically.
-- `web/src/app/router/featureRegistry.tsx` auto-discovers `web/src/features/**/index.ts`, so deleting the feature folder is enough. No manual router edit is required.
-- The current reference-module schema names are `admin`, `sample_feature`, `blog`, and `knowledge_base`.
-- The only deliberate cross-teaching seams are `Admin -> SampleFeature.PublicContracts` (event consumer) and `Admin -> KnowledgeBase.PublicContracts` (event consumer plus shared-read example). Removing `SampleFeature`, `Blog`, or `KnowledgeBase` only requires deleting the matching consumer in `Admin`; removing `Admin` requires no companion cleanup in the other teaching modules.
+- `src/ApiHost/ApiHost.csproj` and the main test projects use wildcard module references, so deleting the module folder removes those project references automatically
+- `web/src/app/router/featureRegistry.tsx` auto-discovers `web/src/features/**/index.ts`, so deleting the feature folder is enough; no manual router edit is required
+- the current reference-module schema names are `admin`, `sample_feature`, `blog`, and `knowledge_base`
+- the only deliberate cross-teaching seams are `Admin -> SampleFeature.PublicContracts` (event consumer) and `Admin -> KnowledgeBase.PublicContracts` (event consumer plus shared-read example); removing `SampleFeature`, `Blog`, or `KnowledgeBase` only requires deleting the matching consumer in `Admin`, while removing `Admin` requires no companion cleanup in the other teaching modules
 
-### After Removal
+#### After removal
 
-- Run `pwsh ./scripts/Invoke-LocalGates.ps1` to exercise the canonical local validation wall.
-- If you only need to re-run one area after a fix, use `pwsh ./scripts/Invoke-CiGate.ps1 -Id <id>` instead of dropping to a raw command list.
-- If you removed all three teaching modules, the app still boots with the core modules. The bootstrap manifest will contain `Platform` and `Identity`, and the frontend will still expose the `Platform` feature. Your first scaffolded module will add additional module surface alongside those core modules.
+- run `pwsh ./scripts/Invoke-LocalGates.ps1` to exercise the canonical local validation wall
+- if you only need to re-run one area after a fix, use `pwsh ./scripts/Invoke-CiGate.ps1 -Id <id>` instead of dropping to a raw command list
+- if you removed all three teaching modules, the app still boots with the core modules; the bootstrap manifest will contain `Platform` and `Identity`, and the frontend will still expose the `Platform` feature; your first scaffolded module will add additional module surface alongside those core modules
 
-## Resetting the Database
+### Resetting The Database
 
 After renaming or removing modules, reset your local database:
 
@@ -372,7 +330,7 @@ DROP DATABASE baseline;
 CREATE DATABASE baseline;
 ```
 
-## Verifying Your Fork
+### Verifying Your Adopted Repo
 
 After all rename and removal steps, run the full supported local validation wall to confirm everything is clean:
 
@@ -391,3 +349,7 @@ pwsh ./scripts/Invoke-CiGate.ps1 -Id contract-generation-and-compatibility
 If a gate cannot run because of a missing prerequisite, report the exact missing prerequisite instead of silently skipping it. The most common cases are Docker/Testcontainers for `integration-tests` and `ConnectionStrings__BaselineDatabase` for `contract-generation-and-compatibility`.
 
 All gates should pass. If any fail, the removal or rename missed a reference.
+
+## Agent Note
+
+Agent users should follow the same adoption workflow described above. The repo-owned helper prompt lives at [`../prompts/adopt-governed-baseline.md`](../prompts/adopt-governed-baseline.md). Keep this document as the canonical adoption checklist and update the prompt file in the same review whenever the adoption workflow changes.

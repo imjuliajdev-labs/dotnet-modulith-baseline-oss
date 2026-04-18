@@ -12,6 +12,8 @@ All settings can be supplied through environment variables using the standard AS
 |---|---|---|
 | `ConnectionStrings__BaselineDatabase` | Yes | Single connection string used by every module's persistence layer. The schema separation between modules is enforced by EF Core defaults and architecture tests, not by separate connections. |
 
+The PostgreSQL server behind `ConnectionStrings__BaselineDatabase` must allow prepared transactions (`max_prepared_transactions > 0`). The baseline's command-transaction flow can coordinate shared-runtime idempotency, platform audit writes, module persistence, and outbox persistence against the same database during one command execution. The checked-in `docker-compose.yml` already starts PostgreSQL with `max_prepared_transactions=64`; production deployments need the equivalent server-side setting.
+
 ### Identity bootstrap
 
 | Key | Required | Notes |

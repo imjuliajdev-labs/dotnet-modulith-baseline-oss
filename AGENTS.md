@@ -37,14 +37,17 @@ When the user asks to add a new module or expand the baseline with a new bounded
 
 When the user asks whether this baseline is ready to fork, or asks to adopt it into a new product base:
 
-- Prefer the shared repo-owned prompt at `prompts/adopt-governed-baseline.md`.
-- read [`docs/ADOPT.md`](docs/ADOPT.md) before proposing changes
-- for first-time human adopters who have not resolved their inputs yet, prefer the guided wrapper `scripts/Start-Adoption.ps1`; it asks for the target folder, optional target remote, the human-facing application name, the technical slug, module-retention choices, and the validation profile, explains what the optional teaching modules are for, points the adopter to `docs/MODULE_GUIDE.md` and `docs/ADOPT.md`, writes `adopt-spec.json` into the target repo, runs the governed dry run first, and only applies after explicit confirmation
-- for agent-driven or already-decided adoption runs, prefer the config-first adoption workflow at `templates/adoption/adopt-spec.example.json` plus `scripts/Adopt-Baseline.ps1`; use `-DryRun` first to make the human-facing application name, the technical slug, and module-retention decisions explicit before mutation
-- all four `modulePreset` values are supported in apply mode, including `custom` with an explicit `keepModules` array; `Platform` and `Identity` must always be in the resolved keep set
-- use the checklist in `docs/ADOPT.md` as the detailed reference for required identity surfaces and teaching-module dependencies, even when the script is doing the apply work
-- adoption validation profiles dispatch through the canonical gate runner (`scripts/Invoke-LocalGates.ps1` and `scripts/Invoke-CiGate.ps1 -Id <id>`); do not hand-roll raw `dotnet test` or `pnpm` command lists when the governed gate wrappers already cover the path
-- do not invent ad hoc rename or cleanup flows when the documented adoption workflow already covers the supported path
+- Prefer the shared repo-owned prompt at `prompts/adopt-governed-baseline.md`; it follows the same supported workflow documented in `docs/ADOPT.md`, not a parallel path.
+- Read [`docs/ADOPT.md`](docs/ADOPT.md) before proposing changes.
+- Treat adoption as one supported workflow with two entry points:
+  - for first-time human adopters with unresolved inputs, prefer the guided wrapper `scripts/Start-Adoption.ps1`
+  - for agent-driven or already-decided adoption runs, prefer `templates/adoption/adopt-spec.example.json` plus `scripts/Adopt-Baseline.ps1`
+- When you use `scripts/Start-Adoption.ps1`, remember that it gathers the target folder, optional target remote, human-facing application name, technical slug, module-retention choices, and validation profile, points the adopter to `docs/MODULE_GUIDE.md` and `docs/ADOPT.md`, writes `adopt-spec.json` into the target repo, runs the dry run first, and only applies after explicit confirmation.
+- When you use `scripts/Adopt-Baseline.ps1`, use `-DryRun` first so the human-facing application name, technical slug, and module-retention decisions are explicit before mutation.
+- All four `modulePreset` values are supported in apply mode, including `custom` with an explicit `keepModules` array; `Platform` and `Identity` must always be in the resolved keep set.
+- Use the checklist in `docs/ADOPT.md` as the detailed reference for required identity surfaces and teaching-module dependencies, even when the script is doing the apply work.
+- Adoption validation profiles dispatch through the canonical gate runner (`scripts/Invoke-LocalGates.ps1` and `scripts/Invoke-CiGate.ps1 -Id <id>`); do not hand-roll raw `dotnet test` or `pnpm` command lists when the governed gate wrappers already cover the path.
+- Do not invent ad hoc rename or cleanup flows when the documented adoption workflow already covers the supported path.
 
 ## Working Rules For Agents
 

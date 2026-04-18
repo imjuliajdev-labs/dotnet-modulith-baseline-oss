@@ -69,6 +69,11 @@ internal sealed class ConfiguredPostgresDataSourceResolver : IPostgresDataSource
         var connectionString = configuration.GetConnectionString(connectionStringName);
         if (string.IsNullOrWhiteSpace(connectionString))
         {
+            if (string.Equals(connectionStringName, SharedRuntimePersistenceDefaults.ConnectionStringName, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException(SharedRuntimePersistenceDefaults.MissingConnectionStringMessage);
+            }
+
             throw new InvalidOperationException($"PostgreSQL data source requires ConnectionStrings:{connectionStringName}.");
         }
 

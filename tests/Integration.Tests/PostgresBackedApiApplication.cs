@@ -102,6 +102,7 @@ internal sealed class PostgresBackedApiApplication : IAsyncDisposable
             .WithDatabase(databaseName)
             .WithUsername("postgres")
             .WithPassword("postgres")
+            .WithCommand("-c", "max_prepared_transactions=64")
             .Build();
 
         await postgres.StartAsync();

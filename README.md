@@ -87,9 +87,9 @@ The authoritative rules live in [AGENTS.md](AGENTS.md) and the docs under [docs]
 
 ## Quick start
 
-Choose one of these supported startup paths.
+For first-time OSS evaluation, start with the Docker path. The local path is still supported when you want direct repo-based development.
 
-### Option A: full Docker composed path
+### Recommended: full Docker composed path
 
 This is the best first-time OSS evaluation path because it brings up PostgreSQL, DbMigrator, and ApiHost together with the checked-in Development bootstrap configuration.
 
@@ -111,7 +111,7 @@ Representative endpoints on the full Docker path:
 - Bootstrap: `http://localhost:8080/api/v1/platform/bootstrap`
 - Antiforgery: `http://localhost:8080/api/v1/identity/antiforgery`
 
-### Option B: local ApiHost + local frontend/dev path
+### Alternative: local ApiHost + local frontend/dev path
 
 Use this when you want to run the backend directly from the repo while keeping PostgreSQL on Docker.
 
@@ -250,19 +250,34 @@ The integration suite verifies:
 
 Run both before merging any structural change.
 
-## Fork and adoption preflight
+## Adopting this repo as your base
 
-If you are evaluating this repo as a forkable base, start with [docs/ADOPT.md](docs/ADOPT.md). The repo now includes two supported entry points into the same governed adoption workflow.
+If you want to fork or rename this baseline into a new product repo, start with [docs/ADOPT.md](docs/ADOPT.md).
 
-For first-time human adopters who have not resolved the rename and module-retention inputs yet, start with the guided wrapper:
+This baseline has one governed adoption workflow with two supported entry points:
+
+- **Human-first guided adoption** — run `pwsh ./scripts/Start-Adoption.ps1`
+- **Advanced config-first adoption** — use `templates/adoption/adopt-spec.example.json` with `pwsh ./scripts/Adopt-Baseline.ps1`
+
+Before you start:
+
+- clone this baseline locally into a **source baseline repo** folder
+- choose a separate **target product repo** folder for your adopted project
+- run the adoption workflow from the **source baseline repo root**, not from GitHub and not from inside the target folder
+- the target folder should ideally **not exist yet**; if it already exists, keep it **empty**
+
+Example:
+
+- source baseline repo: `C:\Users\jcv02\Documents\repos\dotnet-modulith-baseline-oss`
+- target product repo: `C:\Users\jcv02\Documents\repos\hspsv2`
+
+If you are a first-time human adopter and have not finalized the target folder, project name or slug, or module-retention choices yet, start with:
 
 ```powershell
 pwsh ./scripts/Start-Adoption.ps1
 ```
 
-`Start-Adoption.ps1` asks for the target folder, optional target git remote, the human-facing application name, the technical slug, teaching-module posture, validation profile, and whether the local database should be reset. The application name is the actual app/product name shown to users in places like the README title and browser title. The technical slug drives runtime identifiers such as the auth cookie name, Data Protection app name, telemetry service name, and the default solution and npm package names. The wrapper also gives a short explanation of what each optional teaching module is for and points you to `docs/MODULE_GUIDE.md` and `docs/ADOPT.md` for more detail before you choose. Internally it preserves the cloned git history and aligns the target repo with the current working tree snapshot before running the governed dry run, so the guided path validates the live source state rather than a stale committed copy. It then writes `adopt-spec.json` into the target repo, runs `Adopt-Baseline.ps1 -DryRun`, and only proceeds to apply mode after explicit confirmation.
-
-If you already know the inputs or want the deterministic direct path for automation and agent-driven runs, use the config-first workflow directly:
+If you already know those inputs or want the automation or agent path, use:
 
 ```powershell
 cp ./templates/adoption/adopt-spec.example.json ./adopt-spec.json
@@ -270,7 +285,9 @@ pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json -DryRun
 pwsh ./scripts/Adopt-Baseline.ps1 -SpecFile ./adopt-spec.json
 ```
 
-Apply mode supports all four `modulePreset` values in the example schema, including `custom` with an explicit `keepModules` array (`Platform` and `Identity` are always required). Adoption validation profiles dispatch through the canonical local gate runner instead of maintaining a second raw command list: `full` runs `pwsh ./scripts/Invoke-LocalGates.ps1` in manifest order (honoring each gate's `skipLocally` default), `fast` runs a reviewed manifest-backed subset, and `none` skips validation. The adoption spec's scratch root is validated to stay under its declared repo-local or `os-temp` base, and the resolved path is exported as `DOTNET_MODULITH_SCRATCH_ROOT` while validation runs so downstream governance scripts share the same scratch location. If you are using an agent in this repo, prefer the shared repo-owned prompt at `prompts/adopt-governed-baseline.md`. The detailed rename/removal checklist in [docs/ADOPT.md](docs/ADOPT.md) remains the reference for what the script is doing and the fallback manual path.
+Adoption validation profiles dispatch through the canonical local gate runner: `full` runs `pwsh ./scripts/Invoke-LocalGates.ps1` in manifest order, `fast` runs a reviewed manifest-backed subset, and `none` skips validation.
+
+`Platform` and `Identity` are always required. Use [docs/MODULE_GUIDE.md](docs/MODULE_GUIDE.md) to decide which teaching modules to keep, and use [docs/ADOPT.md](docs/ADOPT.md) for the full adoption guide, rename/removal reference, and validation details. Agent-driven adoption follows the same workflow; the repo-owned helper prompt is [prompts/adopt-governed-baseline.md](prompts/adopt-governed-baseline.md).
 
 ## Reference workflow for adding a module
 
@@ -292,6 +309,8 @@ Detailed guidance is in [docs/ADD_MODULE.md](docs/ADD_MODULE.md), [templates/mod
 
 The composed runtime requires PostgreSQL through `ConnectionStrings__BaselineDatabase`. There is no file-backed or SQLite fallback for the shared runtime.
 
+The supported runtime also requires PostgreSQL prepared transactions to be enabled (`max_prepared_transactions > 0`) because command writes can coordinate module state, shared-runtime idempotency, audit, and outbox persistence against the same database in one transactional flow. The checked-in `docker-compose.yml` already starts PostgreSQL with `max_prepared_transactions=64`; if you point the baseline at a different PostgreSQL instance, configure that instance accordingly.
+
 Same-origin is the default browser posture. The checked-in Development profile already allowlists `https://localhost:3000` for the default Vite dev server. If you run the frontend from a different origin, explicitly allowlist that origin through `Frontend:AllowedOrigins` for the backend environment you are using.
 
 - Full composed evaluation path: `docker compose up --build`
@@ -303,6 +322,16 @@ Same-origin is the default browser posture. The checked-in Development profile a
 Docker Compose requires a `.env` file at the repository root. Copy `.env.example` to `.env` before running `docker compose up`. The `.env.example` file documents all required variables with development defaults. For the full secret-source model (Development, CI, Production), including the naming conventions module authors follow for connection strings, module options, and external credentials, see [docs/SECRET_MANAGEMENT.md](docs/SECRET_MANAGEMENT.md).
 
 `web/playwright.config.ts` also respects `ConnectionStrings__BaselineDatabase`, so browser E2E can be pointed at a fresh local database when you want to isolate Playwright from an existing development volume state.
+
+## Maintainer OSS release workflow
+
+If you maintain a private source clone plus a clean public OSS clone, run the release cut from the private repo with:
+
+```powershell
+pwsh ./scripts/Release-Oss.ps1 -Version 1.0.1
+```
+
+By default the script expects the public clone at `../dotnet-modulith-baseline-oss`. It refuses to release from a dirty private working tree, refreshes the public clone from `origin/main`, replaces that working tree with a tracked-files-only `git archive` snapshot of the current private `HEAD`, and expands that snapshot with the .NET tar APIs so the workflow does not depend on whichever `tar` implementation happens to be first on `PATH`. It then runs `secret-scan` in both repos, runs the selected public validation profile, creates and pushes the private source tag (`private-v1.0.1`), then commits, tags, and pushes the public release (`v1.0.1`). Use `-ValidationProfile none|fast|full` to choose how much validation the public cut runs before push, and use `-Force` only when you intentionally want the script to discard local changes in the public clone. When `full` validation reaches the Testcontainers-backed integration path, the release workflow now attempts to start Docker automatically and waits for `docker info` before continuing; Docker still needs to be installed and reachable on the machine.
 
 ## Why use this as a baseline
 

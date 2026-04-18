@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
+    command: ["postgres", "-c", "max_prepared_transactions=64"]
     env_file: .env
     environment:
       POSTGRES_DB: baseline

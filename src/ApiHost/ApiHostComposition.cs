@@ -139,7 +139,7 @@ public static class ApiHostComposition
         {
             Predicate = registration => registration.Tags.Contains("ready")
         });
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
         {
             app.MapOpenApi("/openapi/{documentName}.json");
             app.MapScalarApiReference(options =>

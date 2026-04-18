@@ -12,7 +12,7 @@ Read these first to build, run, and extend the baseline.
 - [BASELINE_OVERVIEW.md](BASELINE_OVERVIEW.md) — what this repo is and is not, plus adoption tradeoffs.
 - [MODULE_GUIDE.md](MODULE_GUIDE.md) — what each checked-in module is for and when to use it as reference.
 - [ADD_MODULE.md](ADD_MODULE.md) — the only supported workflow for adding a module.
-- [ADOPT.md](ADOPT.md) — using the baseline as the base for a new project, including the guided `Start-Adoption.ps1` wrapper and the direct config-first path.
+- [ADOPT.md](ADOPT.md) — adopting the baseline into a new product repo, with a recommended guided path for first-time humans and an advanced config-first path for automation or agents.
 
 ## Governance (the strict governed set)
 
@@ -62,5 +62,5 @@ Repo-owned prompts under `../prompts/` are task-specific agent workflow accelera
 
 - [../AGENTS.md](../AGENTS.md) — agent and new-contributor entry point into the governed set.
 - [../prompts/add-governed-module.md](../prompts/add-governed-module.md) — canonical repo-owned prompt for adding a module through the governed scaffold workflow.
-- [../prompts/adopt-governed-baseline.md](../prompts/adopt-governed-baseline.md) — canonical repo-owned prompt for forking or adopting the baseline through the supported adoption workflow.
+- [../prompts/adopt-governed-baseline.md](../prompts/adopt-governed-baseline.md) — canonical repo-owned prompt for agent-driven adoption through the same supported workflow documented in `ADOPT.md`, not a parallel path.
 - [../CONTRIBUTING.md](../CONTRIBUTING.md) — contribution workflow.
