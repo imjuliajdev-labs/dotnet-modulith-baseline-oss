@@ -268,8 +268,8 @@ Before you start:
 
 Example:
 
-- source baseline repo: `C:\Users\jcv02\Documents\repos\dotnet-modulith-baseline-oss`
-- target product repo: `C:\Users\jcv02\Documents\repos\hspsv2`
+- source baseline repo: `C:\repos\dotnet-modulith-baseline-oss`
+- target product repo: `C:\repos\my-product`
 
 If you are a first-time human adopter and have not finalized the target folder, project name or slug, or module-retention choices yet, start with:
 

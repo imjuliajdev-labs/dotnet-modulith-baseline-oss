@@ -15,8 +15,8 @@ The safest mental model is:
 
 Example:
 
-- source baseline repo: `C:\Users\jcv02\Documents\repos\dotnet-modulith-baseline-oss`
-- target product repo: `C:\Users\jcv02\Documents\repos\hspsv2`
+- source baseline repo: `C:\repos\dotnet-modulith-baseline-oss`
+- target product repo: `C:\repos\my-product`
 
 Important boundaries:
 
